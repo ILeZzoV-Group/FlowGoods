@@ -1,10 +1,7 @@
 package ru.ilezzov.group.flowgoods.iam.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.ilezzov.group.flowgoods.common.entity.BaseEntity;
 
 @Entity
@@ -13,6 +10,7 @@ import ru.ilezzov.group.flowgoods.common.entity.BaseEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User extends BaseEntity {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
