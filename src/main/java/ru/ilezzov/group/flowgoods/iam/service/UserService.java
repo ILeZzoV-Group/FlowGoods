@@ -5,8 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.common.exception.user.UserAlreadyExists;
-import ru.ilezzov.group.flowgoods.iam.dto.RegisterUserDto;
-import ru.ilezzov.group.flowgoods.iam.dto.ResponseUserDto;
+import ru.ilezzov.group.flowgoods.iam.dto.UserCreateDto;
+import ru.ilezzov.group.flowgoods.iam.dto.UserResponseDto;
 import ru.ilezzov.group.flowgoods.iam.entity.User;
 import ru.ilezzov.group.flowgoods.iam.mapper.UserMapper;
 import ru.ilezzov.group.flowgoods.iam.mapper.UserResolver;
@@ -18,29 +18,29 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
-    private final UserResolver resolver;
+    private final UserResolver userResolver;
+    private final UserRepository userRepository;
     private final UserMapper mapper;
-    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public ResponseUserDto getUserById(final Long id) {
+    public UserResponseDto getUserById(final Long id) {
         return this.mapper.toDto(
-                this.resolver.resolveUser(id)
+                this.userResolver.resolveUser(id)
         );
     }
 
     @Transactional(readOnly = true)
-    public ResponseUserDto getUserByUUID(final UUID uuid) {
+    public UserResponseDto getUserByUuid(final UUID uuid) {
         return this.mapper.toDto(
-            this.resolver.resolveUser(uuid)
+            this.userResolver.resolveUser(uuid)
         );
     }
 
-    public ResponseUserDto registerUser(final RegisterUserDto dto) {
+    public UserResponseDto registerUser(final UserCreateDto dto) {
         final String email = dto.email().toLowerCase().trim();
         
-        if (this.repository.existsByEmail(email)) {
+        if (this.userRepository.existsByEmail(email)) {
             throw new UserAlreadyExists(email);
         }
 
@@ -51,7 +51,7 @@ public class UserService {
                 .build();
 
         return this.mapper.toDto(
-                this.repository.save(registerUser)
+                this.userRepository.save(registerUser)
         );
     }
 }

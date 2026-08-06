@@ -3,7 +3,7 @@ package ru.ilezzov.group.flowgoods.iam.dto;
 import java.time.Instant;
 import java.util.UUID;
 
-public record ResponseUserDto(
+public record UserResponseDto(
         UUID uuid,
         String email,
         String username,
