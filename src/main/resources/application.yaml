@@ -1,7 +1,13 @@
 spring:
   application:
     name: flowgoods
-
   flyway:
     enabled: true
     baseline-on-migrate: true
+  mvc:
+    problem-details:
+      enabled: true
+  config:
+    import:
+    - "classpath:errors/errors-user.yml"
+    - "classpath:errors/errors-product.yml"

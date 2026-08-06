@@ -1,0 +1,8 @@
+app:
+  exceptions:
+    errors:
+      product-not-found:
+        status: 404
+        title: "Product Not Found"
+        type: "https://api.ilezzov.ru/errors/product-not-found"
+        message: "Product with identifier {0} was not found"
