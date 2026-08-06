@@ -19,7 +19,7 @@ public class Profile extends AssignedIdEntity {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @Column(name = "username", length = 63, nullable = false, unique = true)
+    @Column(name = "username", length = 63, unique = true)
     private String username;
 
     @Column(name = "first_name", length = 63)
