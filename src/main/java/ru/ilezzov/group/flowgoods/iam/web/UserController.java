@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.ilezzov.group.flowgoods.iam.dto.AuthResponseDto;
 import ru.ilezzov.group.flowgoods.iam.dto.UserCreateDto;
 import ru.ilezzov.group.flowgoods.iam.dto.UserResponseDto;
 import ru.ilezzov.group.flowgoods.iam.service.UserService;
@@ -25,13 +26,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> registerUser(@RequestBody @Valid final UserCreateDto dto) {
-        final UserResponseDto createdUser = userService.registerUser(dto);
+    public ResponseEntity<AuthResponseDto> registerUser(@RequestBody @Valid final UserCreateDto dto) {
+        final AuthResponseDto authResponseDto = userService.registerUser(dto);
         final URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{uuid}")
-                .buildAndExpand(createdUser.uuid())
+                .buildAndExpand(authResponseDto.user().uuid())
                 .toUri();
 
-        return ResponseEntity.created(location).body(createdUser);
+        return ResponseEntity.created(location).body(authResponseDto);
     }
 }
