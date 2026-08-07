@@ -1,10 +1,7 @@
 package ru.ilezzov.group.flowgoods.iam.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.ilezzov.group.flowgoods.common.entity.AssignedIdEntity;
 
 @Entity
@@ -13,13 +10,14 @@ import ru.ilezzov.group.flowgoods.common.entity.AssignedIdEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Profile extends AssignedIdEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @Column(name = "username", length = 63, unique = true)
+    @Column(name = "username", length = 63, nullable = false, unique = true)
     private String username;
 
     @Column(name = "first_name", length = 63)

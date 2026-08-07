@@ -6,6 +6,10 @@ import jakarta.validation.constraints.Size;
 
 public record UserCreateDto(
         @NotBlank
+        @Size(min = 3, max = 63)
+        String username,
+
+        @NotBlank
         @Email
         @Size(min = 3, max = 255)
         String email,

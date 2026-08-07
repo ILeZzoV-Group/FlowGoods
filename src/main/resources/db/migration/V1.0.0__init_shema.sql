@@ -12,7 +12,7 @@ CREATE UNIQUE INDEX idx_users_email_lower ON users (LOWER(email));
 
 CREATE TABLE IF NOT EXISTS profiles (
     user_id bigint PRIMARY KEY,
-    username varchar(63) UNIQUE,
+    username varchar(63) UNIQUE NOT NULL,
     first_name varchar(63),
     second_name varchar(63),
     avatar_url text,
