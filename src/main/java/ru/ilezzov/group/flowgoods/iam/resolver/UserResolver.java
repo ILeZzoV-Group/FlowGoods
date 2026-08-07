@@ -1,9 +1,9 @@
-package ru.ilezzov.group.flowgoods.iam.mapper;
+package ru.ilezzov.group.flowgoods.iam.resolver;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
-import ru.ilezzov.group.flowgoods.common.exception.user.UserNotFoundException;
+import ru.ilezzov.group.flowgoods.iam.exception.user.UserNotFoundException;
 import ru.ilezzov.group.flowgoods.iam.entity.User;
 import ru.ilezzov.group.flowgoods.iam.repository.UserRepository;
 

@@ -1,4 +1,4 @@
-package ru.ilezzov.group.flowgoods.iam.jwt;
+package ru.ilezzov.group.flowgoods.iam.security.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

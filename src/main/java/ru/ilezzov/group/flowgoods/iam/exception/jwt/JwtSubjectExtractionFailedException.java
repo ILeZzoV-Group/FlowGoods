@@ -1,4 +1,4 @@
-package ru.ilezzov.group.flowgoods.common.exception.jwt;
+package ru.ilezzov.group.flowgoods.iam.exception.jwt;
 
 import ru.ilezzov.group.flowgoods.common.exception.BusinessException;
 

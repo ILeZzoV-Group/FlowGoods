@@ -7,14 +7,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ilezzov.group.flowgoods.common.exception.password.PasswordDoNotMatchException;
-import ru.ilezzov.group.flowgoods.common.exception.user.UserNotFoundException;
+import ru.ilezzov.group.flowgoods.iam.exception.password.PasswordDoNotMatchException;
+import ru.ilezzov.group.flowgoods.iam.exception.user.UserNotFoundException;
 import ru.ilezzov.group.flowgoods.iam.dto.AuthResponseDto;
 import ru.ilezzov.group.flowgoods.iam.dto.UserLoginDto;
 import ru.ilezzov.group.flowgoods.iam.dto.UserResponseDto;
-import ru.ilezzov.group.flowgoods.iam.entity.SecurityUser;
-import ru.ilezzov.group.flowgoods.iam.jwt.JwtProperties;
-import ru.ilezzov.group.flowgoods.iam.jwt.JwtService;
+import ru.ilezzov.group.flowgoods.iam.security.model.SecurityUser;
+import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtProperties;
+import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtService;
 import ru.ilezzov.group.flowgoods.iam.mapper.UserMapper;
 
 @Service

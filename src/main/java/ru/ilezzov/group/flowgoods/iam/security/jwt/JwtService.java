@@ -1,13 +1,13 @@
-package ru.ilezzov.group.flowgoods.iam.jwt;
+package ru.ilezzov.group.flowgoods.iam.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.stereotype.Service;
-import ru.ilezzov.group.flowgoods.common.exception.jwt.JwtExpiredException;
-import ru.ilezzov.group.flowgoods.common.exception.jwt.JwtInvalidSignatureException;
-import ru.ilezzov.group.flowgoods.common.exception.jwt.JwtMalformedException;
-import ru.ilezzov.group.flowgoods.common.exception.jwt.JwtSubjectExtractionFailedException;
+import ru.ilezzov.group.flowgoods.iam.exception.jwt.JwtExpiredException;
+import ru.ilezzov.group.flowgoods.iam.exception.jwt.JwtInvalidSignatureException;
+import ru.ilezzov.group.flowgoods.iam.exception.jwt.JwtMalformedException;
+import ru.ilezzov.group.flowgoods.iam.exception.jwt.JwtSubjectExtractionFailedException;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -86,7 +86,7 @@ public class JwtService {
         } catch (final MalformedJwtException e) {
             throw new JwtMalformedException();
         } catch (final JwtException e) {
-            throw new ru.ilezzov.group.flowgoods.common.exception.jwt.JwtException(token);
+            throw new ru.ilezzov.group.flowgoods.iam.exception.jwt.JwtException(token);
         }
     }
 }

@@ -5,9 +5,9 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import ru.ilezzov.group.flowgoods.common.exception.user.UserNotFoundException;
-import ru.ilezzov.group.flowgoods.iam.entity.SecurityUser;
-import ru.ilezzov.group.flowgoods.iam.mapper.UserResolver;
+import ru.ilezzov.group.flowgoods.iam.exception.user.UserNotFoundException;
+import ru.ilezzov.group.flowgoods.iam.security.model.SecurityUser;
+import ru.ilezzov.group.flowgoods.iam.resolver.UserResolver;
 
 @Component
 @RequiredArgsConstructor

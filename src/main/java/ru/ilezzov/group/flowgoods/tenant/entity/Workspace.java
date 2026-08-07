@@ -1,4 +1,4 @@
-package ru.ilezzov.group.flowgoods.tenat.entity;
+package ru.ilezzov.group.flowgoods.tenant.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

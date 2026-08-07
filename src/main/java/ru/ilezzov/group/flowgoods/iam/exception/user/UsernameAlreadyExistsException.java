@@ -1,4 +1,4 @@
-package ru.ilezzov.group.flowgoods.common.exception.user;
+package ru.ilezzov.group.flowgoods.iam.exception.user;
 
 import ru.ilezzov.group.flowgoods.common.exception.BusinessException;
 

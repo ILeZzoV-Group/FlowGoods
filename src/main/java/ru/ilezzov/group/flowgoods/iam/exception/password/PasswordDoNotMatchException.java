@@ -1,6 +1,5 @@
-package ru.ilezzov.group.flowgoods.common.exception.password;
+package ru.ilezzov.group.flowgoods.iam.exception.password;
 
-import org.hibernate.usertype.BaseUserTypeSupport;
 import ru.ilezzov.group.flowgoods.common.exception.BusinessException;
 
 public class PasswordDoNotMatchException extends BusinessException {

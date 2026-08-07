@@ -1,4 +1,4 @@
-package ru.ilezzov.group.flowgoods.common.config;
+package ru.ilezzov.group.flowgoods.iam.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.ilezzov.group.flowgoods.iam.jwt.JwtAuthenticationFilter;
+import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtAuthenticationFilter;
 import ru.ilezzov.group.flowgoods.iam.service.CustomUserDetailsService;
 
 @Configuration

@@ -1,8 +1,9 @@
-package ru.ilezzov.group.flowgoods.iam.entity;
+package ru.ilezzov.group.flowgoods.iam.security.model;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.ilezzov.group.flowgoods.iam.entity.User;
 
 import java.util.Collection;
 import java.util.List;
