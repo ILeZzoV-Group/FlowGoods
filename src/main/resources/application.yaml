@@ -16,3 +16,10 @@ spring:
     - "classpath:errors/errors-password.yml"
   jpa:
     show-sql: true
+
+app:
+  jwt:
+    secret: 5eMC3WOWY2PVdKifPllqJqofpXr4RWHHTyDar4teXej
+    expiration: 3600000
+    type: "Bearer"
+

@@ -22,12 +22,19 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-flyway")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation("org.springframework.boot:spring-boot-configuration-processor")
-	implementation("org.mapstruct:mapstruct:1.6.3")
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.bouncycastle:bcprov-jdk18on:1.84")
 	implementation("org.springframework.boot:spring-boot-starter-ldap")
+
+	implementation("org.flywaydb:flyway-database-postgresql")
+
+	implementation("org.mapstruct:mapstruct:1.6.3")
+	implementation("org.bouncycastle:bcprov-jdk18on:1.84")
+
+	implementation("io.jsonwebtoken:jjwt-api:0.13.0")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
+
 	testImplementation("org.springframework.security:spring-security-test")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")

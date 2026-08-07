@@ -2,10 +2,10 @@ package ru.ilezzov.group.flowgoods.common.config;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import ru.ilezzov.group.flowgoods.common.exception.ExceptionProperties;
+import ru.ilezzov.group.flowgoods.iam.jwt.JwtProperties;
 
 @Configuration
-@EnableConfigurationProperties(ExceptionProperties.class)
+@EnableConfigurationProperties({ExceptionProperties.class, JwtProperties.class})
 public class GlobalConfig {
 }
