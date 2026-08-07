@@ -1,8 +1,8 @@
 package ru.ilezzov.group.flowgoods.iam.mapper;
 
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
 import ru.ilezzov.group.flowgoods.common.exception.user.UserNotFoundException;
 import ru.ilezzov.group.flowgoods.iam.entity.User;
 import ru.ilezzov.group.flowgoods.iam.repository.UserRepository;
@@ -14,23 +14,30 @@ import java.util.UUID;
 public class UserResolver {
     private final UserRepository repository;
 
-    @Nullable
-    public User resolveUser(final Long id) {
+    public User resolveUserById(final Long id) {
         if (id == null) {
-            return null;
+            throw new NotNullableException("id");
         }
 
         return this.repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    @Nullable
-    public User resolveUser(final UUID uuid) {
+    public User resolveUserByUuid(final UUID uuid) {
         if (uuid == null) {
-            return null;
+            throw new NotNullableException("uuid");
         }
 
         return this.repository.findByUuid(uuid)
                 .orElseThrow(() -> new UserNotFoundException(uuid));
+    }
+
+    public User resolveUserByEmail(final String email) {
+        if (email == null) {
+            throw new NotNullableException("email");
+        }
+
+        return this.repository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 }
