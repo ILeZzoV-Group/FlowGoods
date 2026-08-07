@@ -1,0 +1,8 @@
+app:
+  exceptions:
+    errors:
+      parameter-cannot-be-null:
+        status: 400
+        title: "Parameter Cannot Be Null"
+        type: "https://api.ilezzov.ru/errors/parameter-cannot-be-null"
+        message: "Parameter ''{0}'' cannot be null"
