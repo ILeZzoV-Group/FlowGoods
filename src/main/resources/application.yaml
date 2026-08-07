@@ -11,3 +11,4 @@ spring:
     import:
     - "classpath:errors/errors-user.yml"
     - "classpath:errors/errors-product.yml"
+    - "classpath:errors/errors-jwt.yml"

@@ -1,0 +1,32 @@
+app:
+  exceptions:
+    errors:
+      jwt-expired:
+        status: 401
+        title: "Token Expired"
+        type: "https://api.ilezzov.ru/errors/jwt-expired"
+        message: "JWT token has expired"
+
+      jwt-invalid-signature:
+        status: 401
+        title: "Invalid Token Signature"
+        type: "https://api.ilezzov.ru/errors/jwt-invalid-signature"
+        message: "JWT token signature is invalid"
+
+      jwt-malformed:
+        status: 400
+        title: "Malformed Token"
+        type: "https://api.ilezzov.ru/errors/jwt-malformed"
+        message: "JWT token format is invalid"
+
+      jwt-subject-extraction-failed:
+        status: 400
+        title: "UUID Extraction Failed"
+        type: "https://api.ilezzov.ru/errors/jwt-subject-extraction-failed"
+        message: "Failed to extract UUID from JWT token"
+
+      jwt-error:
+        status: 401
+        title: "Authentication Error"
+        type: "https://api.ilezzov.ru/errors/jwt-error"
+        message: "Authentication failed due to JWT processing error: ''{0}''"
