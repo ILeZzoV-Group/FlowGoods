@@ -12,4 +12,8 @@ public class UserNotFoundException extends BusinessException {
     public UserNotFoundException(final UUID uuid) {
         super("user-not-found", uuid);
     }
+
+    public UserNotFoundException(final String email) {
+        super("user-not-found", email);
+    }
 }
