@@ -13,3 +13,4 @@ spring:
     - "classpath:errors/errors-product.yml"
     - "classpath:errors/errors-jwt.yml"
     - "classpath:errors/errors-general.yml"
+    - "classpath:errors/errors-password.yml"
