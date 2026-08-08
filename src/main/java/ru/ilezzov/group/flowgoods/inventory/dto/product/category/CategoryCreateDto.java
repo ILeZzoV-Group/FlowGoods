@@ -7,9 +7,10 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public record CategoryCreateDto (
-        @NotBlank
-        @Size(min = 3, max = 63)
+        @NotBlank(message = "{validation.category.name.not_blank}")
+        @Size(min = 3, max = 63, message = "{validation.category.name.size}")
         String name,
 
+        @Size(max = 1024, message = "{validation.category.description.size}")
         String description
-) { }
+) {}

@@ -6,19 +6,19 @@ import org.hibernate.validator.constraints.URL;
 import java.util.UUID;
 
 public record SupplierCreateDto (
-        @NotBlank
-        @Size(min = 3, max = 63)
+        @NotBlank(message = "{validation.supplier.name.not_blank}")
+        @Size(min = 3, max = 63, message = "{validation.supplier.name.size}")
         String name,
 
-        @Pattern(regexp = "^\\+?[1-9][0-9]{7,14}$", message = "Invalid phone number format")
-        @Size(max = 15)
+        @Pattern(regexp = "^\\+?[1-9][0-9]{7,14}$", message = "{validation.supplier.phone.invalid}")
+        @Size(max = 15, message = "{validation.supplier.phone.size}")
         String phone,
 
-        @Email
-        @Size(max = 255)
+        @Email(message = "{validation.user.email.invalid}")
+        @Size(max = 255, message = "{validation.user.email.size}")
         String email,
 
-        @URL
-        @Size(max = 255)
+        @URL(message = "{validation.supplier.link.invalid}")
+        @Size(max = 255, message = "{validation.supplier.link.size}")
         String link
-) { }
+) {}
