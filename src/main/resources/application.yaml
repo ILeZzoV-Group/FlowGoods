@@ -10,10 +10,11 @@ spring:
   config:
     import:
     - "classpath:errors/errors-user.yml"
-    - "classpath:errors/errors-product.yml"
+    - "classpath:errors/errors-inventory.yml"
     - "classpath:errors/errors-jwt.yml"
     - "classpath:errors/errors-general.yml"
     - "classpath:errors/errors-password.yml"
+    - "classpath:errors/errors-workspace.yml"
   jpa:
     show-sql: true
 

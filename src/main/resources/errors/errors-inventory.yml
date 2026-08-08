@@ -1,0 +1,32 @@
+app:
+  exceptions:
+    errors:
+      supplier-not-found:
+        status: 404
+        title: "Supplier Not Found"
+        type: "https://api.ilezzov.ru/errors/supplier-not-found"
+        message: "Supplier with UUID ''{0}'' was not found in workspace {1}"
+
+      marketplace-not-found:
+        status: 404
+        title: "Marketplace Not Found"
+        type: "https://api.ilezzov.ru/errors/marketplace-not-found"
+        message: "Marketplace with UUID ''{0}'' was not found in workspace {1}"
+
+      marketplace-already-exists:
+        status: 409
+        title: "Marketplace Already Exists"
+        type: "https://api.ilezzov.ru/errors/marketplace-already-exists"
+        message: "Marketplace with name ''{0}'' already exists"
+
+      category-not-found:
+        status: 404
+        title: "Category Not Found"
+        type: "https://api.ilezzov.ru/errors/category-not-found"
+        message: "Category with UUID ''{0}'' was not found in workspace {1}"
+
+      category-already-exists:
+        status: 409
+        title: "Category Already Exists"
+        type: "https://api.ilezzov.ru/errors/category-already-exists"
+        message: "Category with name ''{0}'' already exists"
