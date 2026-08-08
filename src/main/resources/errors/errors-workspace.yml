@@ -1,0 +1,14 @@
+app:
+  exceptions:
+    errors:
+      workspace-not-found:
+        status: 404
+        title: "Workspace Not Found"
+        type: "https://api.ilezzov.ru/errors/workspace-not-found"
+        message: "Workspace with identifier ''{0}'' was not found"
+
+      workspace-already-exists:
+        status: 409
+        title: "Workspace Already Exists"
+        type: "https://api.ilezzov.ru/errors/workspace-already-exists"
+        message: "Workspace with name '{0}' already exists"
