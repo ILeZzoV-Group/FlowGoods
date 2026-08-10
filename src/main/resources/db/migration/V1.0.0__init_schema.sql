@@ -12,7 +12,7 @@ CREATE UNIQUE INDEX idx_users_email_lower ON users (LOWER(email));
 
 CREATE TABLE IF NOT EXISTS profiles (
     user_id bigint PRIMARY KEY,
-    username varchar(63) UNIQUE NOT NULL,
+    username varchar(63) NOT NULL,
     first_name varchar(63),
     second_name varchar(63),
     avatar_url text,
@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS profiles (
 );
 
 CREATE TABLE IF NOT EXISTS workspace (
+CREATE UNIQUE INDEX idx_users_profile_username_lower ON profiles (LOWER(username));
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
     name varchar(63) NOT NULL,

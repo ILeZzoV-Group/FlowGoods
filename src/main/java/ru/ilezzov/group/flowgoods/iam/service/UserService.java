@@ -1,9 +1,11 @@
 package ru.ilezzov.group.flowgoods.iam.service;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.MappingTarget;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ilezzov.group.flowgoods.iam.dto.UserUpdateDto;
 import ru.ilezzov.group.flowgoods.iam.exception.user.UserAlreadyExistsException;
 import ru.ilezzov.group.flowgoods.iam.exception.user.UsernameAlreadyExistsException;
 import ru.ilezzov.group.flowgoods.iam.dto.AuthResponseDto;
@@ -48,31 +50,23 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getUserByEmail(final String email) {
         return this.mapper.toDto(
-                this.userResolver.resolveUserByEmail(email)
+                this.userResolver.resolveUserByEmail(email.toLowerCase().trim())
         );
     }
 
     public AuthResponseDto registerUser(final UserCreateDto dto) {
         final String email = dto.email().toLowerCase().trim();
-        
         if (this.userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException(email);
         }
 
-        if (this.userRepository.existsByProfileUsername(dto.username())) {
-            throw new UsernameAlreadyExistsException(dto.username());
+        final String username = dto.username().toLowerCase().trim();
+        if (this.userRepository.existsByProfileUsername(username)) {
+            throw new UsernameAlreadyExistsException(username);
         }
 
         final String passwordHash = this.passwordEncoder.encode(dto.password());
-
-        final User registerUser = User.builder()
-                .email(email)
-                .hash(passwordHash)
-                .build();
-        final Profile profile = Profile.builder()
-                .username(dto.username())
-                .build();
-        registerUser.setProfile(profile);
+        final User registerUser = this.mapper.toEntity(dto, passwordHash, email, username);
 
         final UserResponseDto userResponseDto = this.mapper.toDto(
                 this.userRepository.save(registerUser)
@@ -83,5 +77,23 @@ public class UserService {
                 this.jwtProperties.expiration(),
                 userResponseDto
         );
+    }
+
+    public UserResponseDto updateUser(final UserUpdateDto dto, final UUID uuid) {
+        final User user = this.userResolver.resolveUserByUuid(uuid);
+        String normalizedUsername = null;
+
+        if (dto.username() != null) {
+            normalizedUsername = dto.username().toLowerCase().trim();
+
+            if (!user.getProfile().getUsername().equalsIgnoreCase(normalizedUsername)) {
+                if (this.userRepository.existsByProfileUsername(normalizedUsername)) {
+                    throw new UsernameAlreadyExistsException(normalizedUsername);
+                }
+            }
+        }
+
+        this.mapper.updateEntity(dto, user, normalizedUsername);
+        return this.mapper.toDto(user);
     }
 }

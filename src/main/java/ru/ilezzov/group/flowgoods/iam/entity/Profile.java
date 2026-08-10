@@ -25,4 +25,7 @@ public class Profile extends AssignedIdEntity {
 
     @Column(name = "second_name", length = 63)
     private String secondName;
+
+    @Column(name = "avatar_url")
+    private String avatarUrl;
 }
