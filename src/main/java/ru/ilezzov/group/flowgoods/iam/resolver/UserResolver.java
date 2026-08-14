@@ -40,4 +40,13 @@ public class UserResolver {
         return this.repository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
+
+    public Long resolveUserIdByUuid(final UUID uuid) {
+        if (uuid == null) {
+            throw new NotNullableException("uuid");
+        }
+
+        return this.repository.findIdByUuid(uuid)
+                .orElseThrow(() -> new UserNotFoundException(uuid));
+    }
 }
