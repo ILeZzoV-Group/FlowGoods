@@ -3,11 +3,16 @@ package ru.ilezzov.group.flowgoods.inventory.web;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.ilezzov.group.flowgoods.iam.resolver.UserResolver;
+import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtPrincipal;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryResponseDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.service.CategoryService;
+import ru.ilezzov.group.flowgoods.tenant.mapper.WorkspaceMapper;
 import ru.ilezzov.group.flowgoods.tenant.resolver.WorkspaceResolver;
 
 import java.net.URI;
@@ -18,19 +23,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
+
     private final WorkspaceResolver workspaceResolver;
+    private final UserResolver userResolver;
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<CategoryResponseDto> getCategory(@RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @PathVariable final UUID uuid) {
-        final Long workspaceId = this.workspaceResolver.resolverIdByUuid(workspaceUuid);
+    public ResponseEntity<CategoryResponseDto> getCategory(@AuthenticationPrincipal JwtPrincipal principal, @RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @PathVariable final UUID uuid) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
         return ResponseEntity.ok(
                 this.categoryService.getCategory(uuid, workspaceId)
         );
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponseDto> createCategory(@RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @RequestBody @Valid final CategoryCreateDto dto) {
-        final Long workspaceId = this.workspaceResolver.resolverIdByUuid(workspaceUuid);
+    public ResponseEntity<CategoryResponseDto> createCategory(@AuthenticationPrincipal JwtPrincipal principal, @RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @RequestBody @Valid final CategoryCreateDto dto) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
         final CategoryResponseDto responseDto = this.categoryService.createCategory(dto, workspaceId);
         final URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{uuid}")
@@ -38,5 +49,14 @@ public class CategoryController {
                 .toUri();
 
         return ResponseEntity.created(location).body(responseDto);
+    }
+
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<CategoryResponseDto> updateCategory(@AuthenticationPrincipal JwtPrincipal principal, @RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @PathVariable final UUID uuid, @RequestBody @Valid final CategoryUpdateDto dto) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
+        final CategoryResponseDto responseDto = this.categoryService.updateCategory(uuid, dto, workspaceId);
+        return ResponseEntity.ok(responseDto);
     }
 }

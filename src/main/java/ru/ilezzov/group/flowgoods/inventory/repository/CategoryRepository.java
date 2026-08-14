@@ -1,7 +1,5 @@
 package ru.ilezzov.group.flowgoods.inventory.repository;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Category;
 

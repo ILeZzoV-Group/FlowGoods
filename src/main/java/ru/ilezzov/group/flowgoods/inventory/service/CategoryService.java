@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryResponseDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Category;
 import ru.ilezzov.group.flowgoods.inventory.exception.category.CategoryAlreadyExistsException;
-import ru.ilezzov.group.flowgoods.inventory.exception.marketplace.MarketplaceAlreadyExistsException;
 import ru.ilezzov.group.flowgoods.inventory.mapper.CategoryMapper;
 import ru.ilezzov.group.flowgoods.inventory.repository.CategoryRepository;
 import ru.ilezzov.group.flowgoods.inventory.resolver.CategoryResolver;
@@ -25,7 +25,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryResponseDto getCategory(final UUID uuid, final Long workspaceId) {
         return this.categoryMapper.toDto(
-                this.categoryResolver.resolverByUuidAndWorkspace(
+                this.categoryResolver.resolveByUuidAndWorkspaceId(
                         uuid, workspaceId
                 )
         );
@@ -36,14 +36,24 @@ public class CategoryService {
             throw new CategoryAlreadyExistsException(dto.name());
         }
 
-        final Category category = Category.builder()
-                .name(dto.name())
-                .description(dto.description())
-                .workspaceId(workspaceId)
-                .build();
-
+        final Category category = this.categoryMapper.toEntity(dto, workspaceId);
         return this.categoryMapper.toDto(
                 this.categoryRepository.save(category)
         );
+    }
+
+    public CategoryResponseDto updateCategory(final UUID uuid, final CategoryUpdateDto dto, final Long workspaceId) {
+        final Category category = this.categoryResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
+
+        if (category.getName().equals(dto.name())) {
+            return this.categoryMapper.toDto(category);
+        }
+
+        if (this.categoryRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+            throw new CategoryAlreadyExistsException(dto.name());
+        }
+
+        this.categoryMapper.updateEntity(dto, category);
+        return this.categoryMapper.toDto(category);
     }
 }

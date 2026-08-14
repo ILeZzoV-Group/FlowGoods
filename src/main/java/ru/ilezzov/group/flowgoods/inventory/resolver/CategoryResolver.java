@@ -7,7 +7,6 @@ import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Category;
 import ru.ilezzov.group.flowgoods.inventory.exception.category.CategoryNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.repository.CategoryRepository;
-import ru.ilezzov.group.flowgoods.tenant.exception.WorkspaceNotFoundException;
 
 import java.util.UUID;
 
@@ -16,7 +15,7 @@ import java.util.UUID;
 public class CategoryResolver {
     private final CategoryRepository repository;
 
-    public Category resolverByUuidAndWorkspace(final UUID uuid, final Long workspaceId) {
+    public Category resolveByUuidAndWorkspaceId(final UUID uuid, final Long workspaceId) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }
@@ -26,6 +25,6 @@ public class CategoryResolver {
         }
 
         return this.repository.findByUuidAndWorkspaceId(uuid, workspaceId)
-                .orElseThrow(() -> new CategoryNotFoundException(uuid, workspaceId));
+                .orElseThrow(() -> new CategoryNotFoundException(uuid));
     }
 }
