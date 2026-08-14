@@ -5,7 +5,7 @@ import ru.ilezzov.group.flowgoods.common.exception.BusinessException;
 import java.util.UUID;
 
 public class MarketplaceNotFoundException extends BusinessException {
-    public MarketplaceNotFoundException(final UUID uuid, final Long workspaceId) {
-        super("marketplace-not-found", uuid, workspaceId);
+    public MarketplaceNotFoundException(final UUID uuid) {
+        super("marketplace-not-found", uuid);
     }
 }

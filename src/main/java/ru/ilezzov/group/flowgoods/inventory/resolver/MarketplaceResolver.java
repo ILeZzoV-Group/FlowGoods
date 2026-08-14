@@ -14,7 +14,7 @@ import java.util.UUID;
 public class MarketplaceResolver {
     private final MarketplaceRepository repository;
 
-    public Marketplace resolverByUuidAndWorkspace(final UUID uuid, final Long workspaceId) {
+    public Marketplace resolveByUuidAndWorkspaceId(final UUID uuid, final Long workspaceId) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }
@@ -24,6 +24,6 @@ public class MarketplaceResolver {
         }
 
         return this.repository.findByUuidAndWorkspaceId(uuid, workspaceId)
-                .orElseThrow(() -> new MarketplaceNotFoundException(uuid, workspaceId));
+                .orElseThrow(() -> new MarketplaceNotFoundException(uuid));
     }
 }

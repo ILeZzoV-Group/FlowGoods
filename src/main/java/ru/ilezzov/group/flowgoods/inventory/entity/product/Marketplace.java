@@ -14,7 +14,6 @@ import ru.ilezzov.group.flowgoods.inventory.entity.WorkspaceEntity;
 @Table(name = "marketplaces")
 @Getter
 @Setter
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Marketplace extends WorkspaceEntity {

@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceResponseDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Marketplace;
 import ru.ilezzov.group.flowgoods.inventory.exception.marketplace.MarketplaceAlreadyExistsException;
+import ru.ilezzov.group.flowgoods.inventory.exception.marketplace.MarketplaceNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.mapper.MarketplaceMapper;
 import ru.ilezzov.group.flowgoods.inventory.repository.MarketplaceRepository;
 import ru.ilezzov.group.flowgoods.inventory.resolver.MarketplaceResolver;
@@ -24,7 +26,7 @@ public class MarketplaceService {
     @Transactional(readOnly = true)
     public MarketplaceResponseDto getMarketplace(final UUID uuid, final Long workspaceId) {
         return this.marketplaceMapper.toDto(
-                this.marketplaceResolver.resolverByUuidAndWorkspace(
+                this.marketplaceResolver.resolveByUuidAndWorkspaceId(
                         uuid, workspaceId
                 )
         );
@@ -35,14 +37,24 @@ public class MarketplaceService {
             throw new MarketplaceAlreadyExistsException(dto.name());
         }
 
-        final Marketplace marketplace = Marketplace.builder()
-                .name(dto.name())
-                .url(dto.url())
-                .workspaceId(workspaceId)
-                .build();
-
+        final Marketplace marketplace = this.marketplaceMapper.toEntity(dto, workspaceId);
         return this.marketplaceMapper.toDto(
                 this.marketplaceRepository.save(marketplace)
         );
+    }
+
+    public MarketplaceResponseDto updateMarketplace(final UUID uuid, final MarketplaceUpdateDto dto, final Long workspaceId) {
+        final Marketplace marketplace = this.marketplaceResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
+
+        if (marketplace.getName().equals(dto.name())) {
+            throw new MarketplaceAlreadyExistsException(dto.name());
+        }
+
+        if (this.marketplaceRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+            throw new MarketplaceAlreadyExistsException(dto.name());
+        }
+
+        this.marketplaceMapper.updateEntity(dto, marketplace);
+        return this.marketplaceMapper.toDto(marketplace);
     }
 }
