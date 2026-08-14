@@ -14,7 +14,7 @@ import java.util.UUID;
 public class SupplierResolver {
     private final SupplierRepository repository;
 
-    public Supplier resolverByUuidAndWorkspace(final UUID uuid, final Long workspaceId) {
+    public Supplier resolveByUuidAndWorkspaceId(final UUID uuid, final Long workspaceId) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }
@@ -24,6 +24,6 @@ public class SupplierResolver {
         }
 
         return this.repository.findByUuidAndWorkspaceId(uuid, workspaceId)
-                .orElseThrow(() -> new SupplierNotFoundException(uuid, workspaceId));
+                .orElseThrow(() -> new SupplierNotFoundException(uuid));
     }
 }

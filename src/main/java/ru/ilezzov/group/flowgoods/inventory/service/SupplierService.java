@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierResponseDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Contact;
 import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Supplier;
 import ru.ilezzov.group.flowgoods.inventory.mapper.SupplierMapper;
@@ -24,27 +25,22 @@ public class SupplierService {
     @Transactional(readOnly = true)
     public SupplierResponseDto getSupplier(final UUID uuid, final Long workspaceId) {
         return this.supplierMapper.toDto(
-                this.supplierResolver.resolverByUuidAndWorkspace(
+                this.supplierResolver.resolveByUuidAndWorkspaceId(
                         uuid, workspaceId
                 )
         );
     }
 
     public SupplierResponseDto createSupplier(final SupplierCreateDto dto, final Long workspaceId) {
-        final Contact contact = Contact.builder()
-                .phone(dto.phone())
-                .email(dto.email())
-                .link(dto.link())
-                .build();
-        final Supplier supplier = Supplier.builder()
-                .name(dto.name())
-                .workspaceId(workspaceId)
-                .build();
-
-        supplier.setContact(contact);
-
+        final Supplier supplier = this.supplierMapper.toEntity(dto, workspaceId);
         return this.supplierMapper.toDto(
                 this.supplierRepository.save(supplier)
         );
+    }
+
+    public SupplierResponseDto updateSupplier(final UUID uuid, final SupplierUpdateDto dto, final Long workspaceId) {
+        final Supplier supplier = this.supplierResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
+        this.supplierMapper.updateSupplier(dto, supplier);
+        return this.supplierMapper.toDto(supplier);
     }
 }

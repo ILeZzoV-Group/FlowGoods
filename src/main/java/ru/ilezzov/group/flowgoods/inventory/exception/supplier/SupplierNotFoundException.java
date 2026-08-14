@@ -5,7 +5,7 @@ import ru.ilezzov.group.flowgoods.common.exception.BusinessException;
 import java.util.UUID;
 
 public class SupplierNotFoundException extends BusinessException {
-    public SupplierNotFoundException(final UUID uuid, final Long workspaceId) {
-        super("supplier-not-found", uuid, workspaceId);
+    public SupplierNotFoundException(final UUID uuid) {
+        super("supplier-not-found", uuid);
     }
 }

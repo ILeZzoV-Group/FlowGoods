@@ -3,12 +3,16 @@ package ru.ilezzov.group.flowgoods.inventory.web;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceCreateDto;
+import ru.ilezzov.group.flowgoods.iam.resolver.UserResolver;
+import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtPrincipal;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceResponseDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierResponseDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.service.SupplierService;
 import ru.ilezzov.group.flowgoods.tenant.resolver.WorkspaceResolver;
 
@@ -20,19 +24,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SupplierController {
     private final SupplierService supplierService;
+
     private final WorkspaceResolver workspaceResolver;
+    private final UserResolver userResolver;
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<SupplierResponseDto> getSupplier(@RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @PathVariable final UUID uuid) {
-        final Long workspaceId = this.workspaceResolver.resolverIdByUuid(workspaceUuid);
+    public ResponseEntity<SupplierResponseDto> getSupplier(@AuthenticationPrincipal JwtPrincipal principal, @RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @PathVariable final UUID uuid) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
         return ResponseEntity.ok(
                 this.supplierService.getSupplier(uuid, workspaceId)
         );
     }
 
     @PostMapping
-    public ResponseEntity<SupplierResponseDto> createCategory(@RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @RequestBody @Valid final SupplierCreateDto dto) {
-        final Long workspaceId = this.workspaceResolver.resolverIdByUuid(workspaceUuid);
+    public ResponseEntity<SupplierResponseDto> createSupplier(@AuthenticationPrincipal JwtPrincipal principal, @RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @RequestBody @Valid final SupplierCreateDto dto) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
         final SupplierResponseDto responseDto = this.supplierService.createSupplier(dto, workspaceId);
         final URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{uuid}")
@@ -40,5 +50,14 @@ public class SupplierController {
                 .toUri();
 
         return ResponseEntity.created(location).body(responseDto);
+    }
+
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<SupplierResponseDto> updateSupplier(@AuthenticationPrincipal JwtPrincipal principal, @RequestHeader("X-Workspace-ID") final UUID workspaceUuid, @PathVariable final UUID uuid, @RequestBody @Valid final SupplierUpdateDto dto) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
+        final SupplierResponseDto responseDto = this.supplierService.updateSupplier(uuid, dto, workspaceId);
+        return ResponseEntity.ok(responseDto);
     }
 }

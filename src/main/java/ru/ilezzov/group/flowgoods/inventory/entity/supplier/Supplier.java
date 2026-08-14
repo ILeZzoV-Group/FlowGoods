@@ -11,7 +11,6 @@ import ru.ilezzov.group.flowgoods.inventory.entity.WorkspaceEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 public class Supplier extends WorkspaceEntity {
     @Column(name = "name", length = 63, nullable = false)
     private String name;
