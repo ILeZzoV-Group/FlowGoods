@@ -1,10 +1,12 @@
 package ru.ilezzov.group.flowgoods.iam.dto;
 
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 
 public record UserUpdateDto (
         @Size(min = 3, max = 63, message = "{validation.user.username.size}")
+        @Pattern(regexp = "^[a-zA-Z0-9_.-]+$", message = "{validation.user.username.invalid}")
         String username,
 
         @Size(max = 63, message = "{validation.user.firstname.size}")
