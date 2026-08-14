@@ -14,7 +14,7 @@ import java.util.UUID;
 public class WorkspaceResolver {
     private final WorkspaceRepository repository;
 
-    public Workspace resolverByUuid(final UUID uuid) {
+    public Workspace resolveByUuid(final UUID uuid) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }
@@ -23,12 +23,37 @@ public class WorkspaceResolver {
                 .orElseThrow(() -> new WorkspaceNotFoundException(uuid));
     }
 
-    public Long resolverIdByUuid(final UUID uuid) {
+    public Long resolveIdByUuid(final UUID uuid) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }
 
         return this.repository.findIdByUuid(uuid)
+                .orElseThrow(() -> new WorkspaceNotFoundException(uuid));
+    }
+
+    public Workspace resolveByUuidAndOwnerId(final UUID uuid, final Long ownerId) {
+        if (uuid == null) {
+            throw new NotNullableException("uuid");
+        }
+
+        if (ownerId == null) {
+            throw new NotNullableException("ownerId");
+        }
+
+        return this.repository.findByUuidAndOwnerId(uuid, ownerId)
+                .orElseThrow(() -> new WorkspaceNotFoundException(uuid));
+    }
+
+    public Long resolveIdByUuidAndOwnerId(final UUID uuid, final Long ownerId) {
+        if (uuid == null) {
+            throw new NotNullableException("uuid");
+        }
+        if (ownerId == null) {
+            throw new NotNullableException("ownerId");
+        }
+
+        return this.repository.findIdByUuidAndOwnerId(uuid, ownerId)
                 .orElseThrow(() -> new WorkspaceNotFoundException(uuid));
     }
 }

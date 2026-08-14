@@ -11,4 +11,4 @@ app:
         status: 409
         title: "Workspace Already Exists"
         type: "https://api.ilezzov.ru/errors/workspace-already-exists"
-        message: "Workspace with name '{0}' already exists"
+        message: "Workspace with name ''{0}'' already exists"
