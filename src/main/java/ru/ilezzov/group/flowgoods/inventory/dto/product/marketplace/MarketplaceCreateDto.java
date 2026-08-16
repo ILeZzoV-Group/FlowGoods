@@ -3,10 +3,12 @@ package ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
+import ru.ilezzov.group.flowgoods.common.annotation.Trimmed;
 
 public record MarketplaceCreateDto (
         @NotBlank(message = "{validation.marketplace.name.not_blank}")
         @Size(min = 3, max = 63, message = "{validation.marketplace.name.size}")
+        @Trimmed
         String name,
 
         @NotBlank(message = "{validation.marketplace.url.not_blank}")

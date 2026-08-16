@@ -2,12 +2,14 @@ package ru.ilezzov.group.flowgoods.inventory.dto.supplier;
 
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
+import ru.ilezzov.group.flowgoods.common.annotation.Trimmed;
 
 import java.util.UUID;
 
 public record SupplierCreateDto (
         @NotBlank(message = "{validation.supplier.name.not_blank}")
         @Size(min = 3, max = 63, message = "{validation.supplier.name.size}")
+        @Trimmed
         String name,
 
         @Pattern(regexp = "^\\+?[1-9][0-9]{7,14}$", message = "{validation.supplier.phone.invalid}")

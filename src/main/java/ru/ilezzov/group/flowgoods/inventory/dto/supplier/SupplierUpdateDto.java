@@ -5,10 +5,12 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 import ru.ilezzov.group.flowgoods.common.annotation.NotOfSpaces;
+import ru.ilezzov.group.flowgoods.common.annotation.Trimmed;
 
 public record SupplierUpdateDto (
         @Size(min = 3, max = 63, message = "{validation.supplier.name.size}")
         @NotOfSpaces(message = "{validation.supplier.name.not_of_spaces}")
+        @Trimmed
         String name,
 
         @Pattern(regexp = "^\\+?[1-9][0-9]{7,14}$", message = "{validation.supplier.phone.invalid}")
