@@ -46,12 +46,10 @@ public class MarketplaceService {
     public MarketplaceResponseDto updateMarketplace(final UUID uuid, final MarketplaceUpdateDto dto, final Long workspaceId) {
         final Marketplace marketplace = this.marketplaceResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
 
-        if (marketplace.getName().equals(dto.name())) {
-            throw new MarketplaceAlreadyExistsException(dto.name());
-        }
-
-        if (this.marketplaceRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
-            throw new MarketplaceAlreadyExistsException(dto.name());
+        if (!marketplace.getName().equals(dto.name())) {
+            if (this.marketplaceRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+                throw new MarketplaceAlreadyExistsException(dto.name());
+            }
         }
 
         this.marketplaceMapper.updateEntity(dto, marketplace);

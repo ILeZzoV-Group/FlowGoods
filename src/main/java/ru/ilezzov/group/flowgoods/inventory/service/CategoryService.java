@@ -45,12 +45,10 @@ public class CategoryService {
     public CategoryResponseDto updateCategory(final UUID uuid, final CategoryUpdateDto dto, final Long workspaceId) {
         final Category category = this.categoryResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
 
-        if (category.getName().equals(dto.name())) {
-            return this.categoryMapper.toDto(category);
-        }
-
-        if (this.categoryRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
-            throw new CategoryAlreadyExistsException(dto.name());
+        if (!category.getName().equals(dto.name())) {
+            if (this.categoryRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+                throw new CategoryAlreadyExistsException(dto.name());
+            }
         }
 
         this.categoryMapper.updateEntity(dto, category);
