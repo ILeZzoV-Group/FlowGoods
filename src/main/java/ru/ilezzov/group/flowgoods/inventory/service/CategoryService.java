@@ -32,7 +32,7 @@ public class CategoryService {
     }
 
     public CategoryResponseDto createCategory(final CategoryCreateDto dto, final Long workspaceId) {
-        if (this.categoryRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+        if (this.categoryRepository.existsByNameIgnoreCaseAndWorkspaceId(dto.name(), workspaceId)) {
             throw new CategoryAlreadyExistsException(dto.name());
         }
 
@@ -45,8 +45,8 @@ public class CategoryService {
     public CategoryResponseDto updateCategory(final UUID uuid, final CategoryUpdateDto dto, final Long workspaceId) {
         final Category category = this.categoryResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
 
-        if (!category.getName().equals(dto.name())) {
-            if (this.categoryRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+        if (!category.getName().equalsIgnoreCase(dto.name())) {
+            if (this.categoryRepository.existsByNameIgnoreCaseAndWorkspaceId(dto.name(), workspaceId)) {
                 throw new CategoryAlreadyExistsException(dto.name());
             }
         }
