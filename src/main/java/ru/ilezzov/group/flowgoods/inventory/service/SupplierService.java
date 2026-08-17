@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierUpdateDto;
-import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Contact;
 import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Supplier;
 import ru.ilezzov.group.flowgoods.inventory.mapper.SupplierMapper;
 import ru.ilezzov.group.flowgoods.inventory.repository.SupplierRepository;
@@ -40,7 +39,7 @@ public class SupplierService {
 
     public SupplierResponseDto updateSupplier(final UUID uuid, final SupplierUpdateDto dto, final Long workspaceId) {
         final Supplier supplier = this.supplierResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
-        this.supplierMapper.updateSupplier(dto, supplier);
+        this.supplierMapper.updateEntity(dto, supplier);
         return this.supplierMapper.toDto(supplier);
     }
 }

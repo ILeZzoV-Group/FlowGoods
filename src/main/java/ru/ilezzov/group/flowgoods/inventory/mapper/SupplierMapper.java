@@ -6,7 +6,6 @@ import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Supplier;
-import ru.ilezzov.group.flowgoods.tenant.entity.Workspace;
 
 @Mapper(config = GlobalMapperConfig.class)
 public interface SupplierMapper {
@@ -23,5 +22,5 @@ public interface SupplierMapper {
     @Mapping(target = "contact.phone", source = "phone")
     @Mapping(target = "contact.email", source = "email")
     @Mapping(target = "contact.link", source = "link")
-    void updateSupplier(final SupplierUpdateDto dto, @MappingTarget final Supplier supplier);
+    void updateEntity(final SupplierUpdateDto dto, @MappingTarget final Supplier supplier);
 }

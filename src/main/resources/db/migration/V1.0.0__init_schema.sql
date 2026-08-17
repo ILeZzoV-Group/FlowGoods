@@ -51,7 +51,29 @@ CREATE TABLE IF NOT EXISTS suppliers (
     version INT NOT NULL DEFAULT 0
 );
 
-CREATE INDEX owner_index_on_workspace ON workspaces(owner_id);
+CREATE INDEX workspace_index_on_suppliers ON suppliers(workspace_id);
+
+CREATE TABLE IF NOT EXISTS contacts (
+    supplier_id BIGINT PRIMARY KEY,
+    phone varchar(15),
+    email varchar(255),
+    link text,
+    version INT NOT NULL DEFAULT 0,
+    CONSTRAINT fk_contact_supplier FOREIGN KEY (supplier_id) REFERENCES suppliers (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    name varchar(63) NOT NULL,
+    description text,
+    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT uk_categories_workspace_id_name UNIQUE (workspace_id, name)
+);
 
 CREATE INDEX workspace_index_on_categories ON categories(workspace_id);
 
