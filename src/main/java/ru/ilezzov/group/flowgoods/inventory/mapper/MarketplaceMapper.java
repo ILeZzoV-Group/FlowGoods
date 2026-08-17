@@ -1,16 +1,13 @@
 package ru.ilezzov.group.flowgoods.inventory.mapper;
 
 import org.mapstruct.*;
+import ru.ilezzov.group.flowgoods.common.mapper.GlobalMapperConfig;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Marketplace;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
-)
+@Mapper(config = GlobalMapperConfig.class)
 public interface MarketplaceMapper {
     MarketplaceResponseDto toDto(Marketplace marketplace);
 

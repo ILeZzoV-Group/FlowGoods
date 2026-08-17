@@ -2,12 +2,12 @@ package ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace;
 
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
-import ru.ilezzov.group.flowgoods.common.annotation.NotOfSpaces;
+import ru.ilezzov.group.flowgoods.common.annotation.OptionalNotBlank;
 import ru.ilezzov.group.flowgoods.common.annotation.Trimmed;
 
 public record MarketplaceUpdateDto (
         @Size(min = 3, max = 63, message = "{validation.marketplace.name.size}")
-        @NotOfSpaces(message = "{validation.marketplace.name.not_of_spaces}")
+        @OptionalNotBlank(message = "{validation.marketplace.name.optional_not_blank}")
         @Trimmed
         String name,
 

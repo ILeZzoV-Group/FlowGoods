@@ -1,16 +1,13 @@
 package ru.ilezzov.group.flowgoods.iam.mapper;
 
 import org.mapstruct.*;
+import ru.ilezzov.group.flowgoods.common.mapper.GlobalMapperConfig;
 import ru.ilezzov.group.flowgoods.iam.dto.UserCreateDto;
 import ru.ilezzov.group.flowgoods.iam.dto.UserResponseDto;
 import ru.ilezzov.group.flowgoods.iam.dto.UserUpdateDto;
 import ru.ilezzov.group.flowgoods.iam.entity.User;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
-)
+@Mapper(config = GlobalMapperConfig.class)
 public interface UserMapper {
     @Mapping(source = "profile", target = ".")
     UserResponseDto toDto(final User user);

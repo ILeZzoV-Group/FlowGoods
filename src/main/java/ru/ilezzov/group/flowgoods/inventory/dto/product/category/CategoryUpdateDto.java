@@ -1,12 +1,12 @@
 package ru.ilezzov.group.flowgoods.inventory.dto.product.category;
 
 import jakarta.validation.constraints.Size;
-import ru.ilezzov.group.flowgoods.common.annotation.NotOfSpaces;
+import ru.ilezzov.group.flowgoods.common.annotation.OptionalNotBlank;
 import ru.ilezzov.group.flowgoods.common.annotation.Trimmed;
 
 public record CategoryUpdateDto (
         @Size(min = 3, max = 63, message = "{validation.category.name.size}")
-        @NotOfSpaces(message = "{validation.category.name.not_of_spaces}")
+        @OptionalNotBlank(message = "{validation.category.name.optional_not_blank}")
         @Trimmed
         String name,
 

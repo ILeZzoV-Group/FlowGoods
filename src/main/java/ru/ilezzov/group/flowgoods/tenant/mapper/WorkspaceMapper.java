@@ -2,16 +2,13 @@ package ru.ilezzov.group.flowgoods.tenant.mapper;
 
 
 import org.mapstruct.*;
+import ru.ilezzov.group.flowgoods.common.mapper.GlobalMapperConfig;
 import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceCreateDto;
 import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceResponseDto;
 import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceUpdateDto;
 import ru.ilezzov.group.flowgoods.tenant.entity.Workspace;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
-)
+@Mapper(config = GlobalMapperConfig.class)
 public interface WorkspaceMapper {
     WorkspaceResponseDto toDto(final Workspace workspace);
 

@@ -1,16 +1,13 @@
 package ru.ilezzov.group.flowgoods.inventory.mapper;
 
 import org.mapstruct.*;
+import ru.ilezzov.group.flowgoods.common.mapper.GlobalMapperConfig;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Category;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
-)
+@Mapper(config = GlobalMapperConfig.class)
 public interface CategoryMapper {
     CategoryResponseDto toDto(Category category);
 
