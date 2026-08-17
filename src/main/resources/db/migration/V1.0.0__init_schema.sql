@@ -84,12 +84,14 @@ CREATE TABLE IF NOT EXISTS marketplaces (
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
     name varchar(63) NOT NULL,
     url text NOT NULL,
-    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
+    workspace_id bigint NOT NULL,
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     version INT NOT NULL DEFAULT 0,
 
-    CONSTRAINT uk_marketplaces_workspace_id_name UNIQUE (workspace_id, name)
+    CONSTRAINT fk_marketplaces_workspace FOREIGN KEY (workspace_id)
+        REFERENCES workspaces(id) ON DELETE CASCADE
 );
 
-CREATE INDEX workspace_index_on_marketplaces ON marketplaces(workspace_id);
+CREATE UNIQUE INDEX uk_marketplaces_workspace_id_name_lower
+    ON marketplaces (workspace_id, LOWER(name));

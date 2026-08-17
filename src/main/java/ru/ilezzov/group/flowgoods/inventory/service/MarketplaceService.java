@@ -33,7 +33,7 @@ public class MarketplaceService {
     }
 
     public MarketplaceResponseDto createMarketplace(final MarketplaceCreateDto dto, final Long workspaceId) {
-        if (this.marketplaceRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+        if (this.marketplaceRepository.existsByNameIgnoreCaseAndWorkspaceId(dto.name(), workspaceId)) {
             throw new MarketplaceAlreadyExistsException(dto.name());
         }
 
@@ -46,8 +46,8 @@ public class MarketplaceService {
     public MarketplaceResponseDto updateMarketplace(final UUID uuid, final MarketplaceUpdateDto dto, final Long workspaceId) {
         final Marketplace marketplace = this.marketplaceResolver.resolveByUuidAndWorkspaceId(uuid, workspaceId);
 
-        if (!marketplace.getName().equals(dto.name())) {
-            if (this.marketplaceRepository.existsByNameAndWorkspaceId(dto.name(), workspaceId)) {
+        if (!marketplace.getName().equalsIgnoreCase(dto.name())) {
+            if (this.marketplaceRepository.existsByNameIgnoreCaseAndWorkspaceId(dto.name(), workspaceId)) {
                 throw new MarketplaceAlreadyExistsException(dto.name());
             }
         }
