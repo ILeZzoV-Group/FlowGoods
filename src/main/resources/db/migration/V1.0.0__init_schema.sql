@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS users (
     version INT NOT NULL DEFAULT 0
 );
 
-CREATE UNIQUE INDEX idx_users_email_lower ON users (LOWER(email));
+CREATE UNIQUE INDEX uk_users_email_lower
+    ON users (LOWER(email));
 
 CREATE TABLE IF NOT EXISTS profiles (
     user_id bigint PRIMARY KEY,
@@ -17,19 +18,54 @@ CREATE TABLE IF NOT EXISTS profiles (
     second_name varchar(63),
     avatar_url text,
     version INT NOT NULL DEFAULT 0,
-    CONSTRAINT fk_profile_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    CONSTRAINT fk_profile_user FOREIGN KEY (user_id)
+        REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS workspace (
-CREATE UNIQUE INDEX idx_users_profile_username_lower ON profiles (LOWER(username));
+CREATE UNIQUE INDEX uk_profiles_username_lower
+    ON profiles (LOWER(username));
+
+CREATE TABLE IF NOT EXISTS workspaces (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
     name varchar(63) NOT NULL,
-    owner_id bigint REFERENCES users(id) NOT NULL,
+    owner_id bigint NOT NULL,
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_workspaces_owner FOREIGN KEY (owner_id)
+        REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX uk_workspaces_owner_id_name_lower
+    ON workspaces (owner_id, LOWER(name));
+
+CREATE TABLE IF NOT EXISTS suppliers (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    name varchar(63) NOT NULL,
+    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     version INT NOT NULL DEFAULT 0
 );
 
-CREATE INDEX owner_index_on_workspace ON workspace(owner_id);
+CREATE INDEX owner_index_on_workspace ON workspaces(owner_id);
 
+CREATE INDEX workspace_index_on_categories ON categories(workspace_id);
+
+CREATE TABLE IF NOT EXISTS marketplaces (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    name varchar(63) NOT NULL,
+    url text NOT NULL,
+    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT uk_marketplaces_workspace_id_name UNIQUE (workspace_id, name)
+);
+
+CREATE INDEX workspace_index_on_marketplaces ON marketplaces(workspace_id);

@@ -37,7 +37,7 @@ public class WorkspaceService {
     }
 
     public WorkspaceResponseDto createWorkspace(final WorkspaceCreateDto dto, final Long ownerId) {
-        if (this.workspaceRepository.existsByNameAndOwnerId(dto.name(), ownerId)) {
+        if (this.workspaceRepository.existsByNameIgnoreCaseAndOwnerId(dto.name(), ownerId)) {
             throw new WorkspaceAlreadyExistsException(dto.name());
         }
 
@@ -55,8 +55,10 @@ public class WorkspaceService {
             return this.workspaceMapper.toDto(workspace);
         }
 
-        if (this.workspaceRepository.existsByNameAndOwnerId(dto.name(), ownerId)) {
-            throw new WorkspaceAlreadyExistsException(dto.name());
+        if (!workspace.getName().equalsIgnoreCase(dto.name())) {
+            if (this.workspaceRepository.existsByNameIgnoreCaseAndOwnerId(dto.name().toLowerCase(), ownerId)) {
+                throw new WorkspaceAlreadyExistsException(dto.name());
+            }
         }
 
         this.workspaceMapper.updateEntity(dto, workspace);
