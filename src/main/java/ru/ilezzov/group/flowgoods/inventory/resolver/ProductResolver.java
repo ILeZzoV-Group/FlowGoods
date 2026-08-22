@@ -1,21 +1,21 @@
 package ru.ilezzov.group.flowgoods.inventory.resolver;
 
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Context;
 import org.springframework.stereotype.Component;
 import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
-import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Supplier;
+import ru.ilezzov.group.flowgoods.inventory.entity.product.Product;
+import ru.ilezzov.group.flowgoods.inventory.exception.product.ProductNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.exception.supplier.SupplierNotFoundException;
-import ru.ilezzov.group.flowgoods.inventory.repository.SupplierRepository;
+import ru.ilezzov.group.flowgoods.inventory.repository.ProductRepository;
 
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class SupplierResolver {
-    private final SupplierRepository repository;
+public class ProductResolver {
+    private final ProductRepository repository;
 
-    public Supplier resolveByUuidAndWorkspaceId(final UUID uuid, @Context final Long workspaceId) {
+    public Product resolverByUuidAndWorkspaceId(final UUID uuid, final Long workspaceId) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }
@@ -25,6 +25,6 @@ public class SupplierResolver {
         }
 
         return this.repository.findByUuidAndWorkspaceId(uuid, workspaceId)
-                .orElseThrow(() -> new SupplierNotFoundException(uuid));
+                .orElseThrow(() -> new ProductNotFoundException(uuid));
     }
 }

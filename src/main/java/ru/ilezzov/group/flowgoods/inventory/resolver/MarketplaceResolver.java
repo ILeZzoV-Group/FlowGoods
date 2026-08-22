@@ -1,6 +1,7 @@
 package ru.ilezzov.group.flowgoods.inventory.resolver;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Context;
 import org.springframework.stereotype.Component;
 import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Marketplace;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public class MarketplaceResolver {
     private final MarketplaceRepository repository;
 
-    public Marketplace resolveByUuidAndWorkspaceId(final UUID uuid, final Long workspaceId) {
+    public Marketplace resolveByUuidAndWorkspaceId(final UUID uuid, @Context final Long workspaceId) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }

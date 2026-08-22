@@ -5,13 +5,13 @@ app:
         status: 404
         title: "Supplier Not Found"
         type: "https://api.ilezzov.ru/errors/supplier-not-found"
-        message: "Supplier with UUID ''{0}'' was not found in workspace {1}"
+        message: "Supplier with UUID ''{0}'' was not found"
 
       marketplace-not-found:
         status: 404
         title: "Marketplace Not Found"
         type: "https://api.ilezzov.ru/errors/marketplace-not-found"
-        message: "Marketplace with UUID ''{0}'' was not found in workspace {1}"
+        message: "Marketplace with UUID ''{0}'' was not found"
 
       marketplace-already-exists:
         status: 409
@@ -23,10 +23,51 @@ app:
         status: 404
         title: "Category Not Found"
         type: "https://api.ilezzov.ru/errors/category-not-found"
-        message: "Category with UUID ''{0}'' was not found in workspace {1}"
+        message: "Category with UUID ''{0}'' was not found"
 
       category-already-exists:
         status: 409
         title: "Category Already Exists"
         type: "https://api.ilezzov.ru/errors/category-already-exists"
         message: "Category with name ''{0}'' already exists"
+
+      product-not-found:
+        status: 404
+        title: "Product Not Found"
+        type: "https://api.ilezzov.ru/errors/product-not-found"
+        message: "Product with UUID ''{0}'' was not found"
+
+      product-already-exists:
+        status: 409
+        title: "Product Already Exists"
+        type: "https://api.ilezzov.ru/errors/product-already-exists"
+        message: "Product with sku ''{0}'' already exists"
+
+      product-cannot-be-published-missing-fields:
+        status: 400
+        title: "Product Cannot Be Published"
+        type: "https://api.ilezzov.ru/errors/product-cannot-be-published-missing-fields"
+        message: "Cannot publish product with UUID ''{0}'' because required fields are missing: {1}"
+
+      product-cannot-be-updated-missing-fields:
+        status: 400
+        title: "Product Cannot Be Updated"
+        type: "https://api.ilezzov.ru/errors/product-cannot-be-updated-missing-fields"
+        message: "Cannot update product with UUID ''{0}'' because required fields are missing: {1}"
+
+      cannot-publish-archived-product:
+        status: 400
+        title: "Cannot Publish Archived Product"
+        type: "https://api.ilezzov.ru/errors/cannot-publish-archived-product"
+        message: "Cannot publish product with UUID ''{0}'' because it is archived"
+
+      cannot-update-archived-product:
+        status: 400
+        title: "Cannot Update Archived Product"
+        type: "https://api.ilezzov.ru/errors/cannot-update-archived-product"
+        message: "Cannot update product with UUID ''{0}'' because it is archived"
+      cannot-suspend-archived-product:
+        status: 400
+        title: "Cannot Suspend Archived Product"
+        type: "https://api.ilezzov.ru/errors/cannot-suspend-archived-product"
+        message: "Cannot suspend product with UUID {0} because it is archived"

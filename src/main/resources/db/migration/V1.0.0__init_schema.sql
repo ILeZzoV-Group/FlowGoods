@@ -54,8 +54,6 @@ CREATE TABLE IF NOT EXISTS suppliers (
         REFERENCES workspaces(id) ON DELETE CASCADE
 );
 
-CREATE INDEX workspace_index_on_suppliers ON suppliers(workspace_id);
-
 CREATE TABLE IF NOT EXISTS contacts (
     supplier_id BIGINT PRIMARY KEY,
     phone varchar(15),
@@ -99,3 +97,31 @@ CREATE TABLE IF NOT EXISTS marketplaces (
 
 CREATE UNIQUE INDEX uk_marketplaces_workspace_id_name_lower
     ON marketplaces (workspace_id, LOWER(name));
+
+CREATE TABLE IF NOT EXISTS products (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    name varchar(255) NOT NULL,
+    sku varchar(63),
+    status varchar(63) NOT NULL DEFAULT 'DRAFT' CHECK ( status in ('DRAFT', 'ACTIVE', 'INACTIVE', 'ARCHIVED') ),
+    price decimal(12, 2) CHECK ( price >= 0 ),
+    category_id bigint REFERENCES categories(id),
+    marketplace_id bigint REFERENCES marketplaces(id),
+    supplier_id bigint REFERENCES suppliers(id),
+    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_products_workspace FOREIGN KEY (workspace_id)
+        REFERENCES workspaces(id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX uk_products_workspace_id_sku_lower
+    ON products (workspace_id, LOWER(sku)) WHERE sku IS NOT NULL;
+
+CREATE INDEX uk_products_workspace_id_status
+    ON products (workspace_id, status);
+
+CREATE INDEX uk_products_workspace_id_category
+    ON products (workspace_id, category_id);

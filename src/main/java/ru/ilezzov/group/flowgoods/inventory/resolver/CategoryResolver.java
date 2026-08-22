@@ -2,6 +2,7 @@ package ru.ilezzov.group.flowgoods.inventory.resolver;
 
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Context;
 import org.springframework.stereotype.Component;
 import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Category;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class CategoryResolver {
     private final CategoryRepository repository;
 
-    public Category resolveByUuidAndWorkspaceId(final UUID uuid, final Long workspaceId) {
+    public Category resolveByUuidAndWorkspaceId(final UUID uuid, @Context final Long workspaceId) {
         if (uuid == null) {
             throw new NotNullableException("uuid");
         }
