@@ -57,6 +57,9 @@ CREATE TABLE IF NOT EXISTS suppliers (
         REFERENCES workspaces(id) ON DELETE CASCADE
 );
 
+CREATE INDEX idx_suppliers_owner_id_id
+    ON suppliers (workspace_id, id);
+
 CREATE TABLE IF NOT EXISTS contacts (
     supplier_id BIGINT PRIMARY KEY,
     phone varchar(15),
