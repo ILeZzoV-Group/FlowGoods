@@ -1,18 +1,24 @@
 package ru.ilezzov.group.flowgoods.inventory.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
+import ru.ilezzov.group.flowgoods.common.cursor.encoder.AesCursorEncoder;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceCreateDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Marketplace;
 import ru.ilezzov.group.flowgoods.inventory.exception.marketplace.MarketplaceAlreadyExistsException;
-import ru.ilezzov.group.flowgoods.inventory.exception.marketplace.MarketplaceNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.mapper.MarketplaceMapper;
 import ru.ilezzov.group.flowgoods.inventory.repository.MarketplaceRepository;
 import ru.ilezzov.group.flowgoods.inventory.resolver.MarketplaceResolver;
+import ru.ilezzov.group.flowgoods.inventory.specification.MarketplaceSpecification;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,6 +28,8 @@ public class MarketplaceService {
     private final MarketplaceRepository marketplaceRepository;
     private final MarketplaceResolver marketplaceResolver;
     private final MarketplaceMapper marketplaceMapper;
+
+    private final AesCursorEncoder cursorEncoder;
 
     @Transactional(readOnly = true)
     public MarketplaceResponseDto getMarketplace(final UUID uuid, final Long workspaceId) {
@@ -54,5 +62,41 @@ public class MarketplaceService {
 
         this.marketplaceMapper.updateEntity(dto, marketplace);
         return this.marketplaceMapper.toDto(marketplace);
+    }
+
+    @Transactional(readOnly = true)
+    public CursorResponseDto<MarketplaceResponseDto> getMarketplaces(final Long workspaceId, final MarketplaceFilterDto dto, final String cursor, final int limit) {
+        final Long lastId = this.cursorEncoder.decode(cursor);
+
+        final Specification<Marketplace> specification = Specification
+                .where(MarketplaceSpecification.workspaceIdEquals(workspaceId))
+                .and(MarketplaceSpecification.marketplaceLikeName(dto.name()))
+                .and(MarketplaceSpecification.idGreaterThan(lastId));
+
+        final List<Marketplace> content = marketplaceRepository.findBy(
+                specification,
+                query -> query
+                        .sortBy(Sort.by(Sort.Direction.ASC, "id"))
+                        .limit(limit + 1)
+                        .all()
+        );
+        final boolean hasNext = content.size() > limit;
+
+        final List<MarketplaceResponseDto> marketplaceResponseDtoList = content.stream()
+                .limit(limit)
+                .map(this.marketplaceMapper::toDto)
+                .toList();
+
+        String nextCursor = null;
+
+        if (hasNext) {
+            content.removeLast();
+
+            if (!marketplaceResponseDtoList.isEmpty()) {
+                nextCursor = this.cursorEncoder.encode(content.getLast().getId());
+            }
+        }
+
+        return new CursorResponseDto<>(marketplaceResponseDtoList, nextCursor);
     }
 }

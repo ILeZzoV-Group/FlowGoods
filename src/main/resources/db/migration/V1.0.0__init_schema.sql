@@ -104,6 +104,9 @@ CREATE TABLE IF NOT EXISTS marketplaces (
 CREATE UNIQUE INDEX uk_marketplaces_workspace_id_name_lower
     ON marketplaces (workspace_id, LOWER(name));
 
+CREATE INDEX idx_marketplaces_owner_id_id
+    ON marketplaces (workspace_id, id);
+
 CREATE TABLE IF NOT EXISTS products (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
