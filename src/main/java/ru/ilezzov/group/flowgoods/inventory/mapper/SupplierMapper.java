@@ -17,6 +17,11 @@ public interface SupplierMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "version", ignore = true)
+    @Mapping(target = "workspaceId", source = "workspaceId")
+    @Mapping(target = "name", source = "dto.name")
+    @Mapping(target = "contact.phone", source = "dto.phone")
+    @Mapping(target = "contact.email", source = "dto.email")
+    @Mapping(target = "contact.link", source = "dto.link")
     Supplier toEntity(final SupplierCreateDto dto, final Long workspaceId);
 
     @Mapping(target = "contact.phone", source = "phone")
