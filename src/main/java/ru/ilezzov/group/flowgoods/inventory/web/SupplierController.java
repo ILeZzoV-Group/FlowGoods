@@ -1,5 +1,6 @@
 package ru.ilezzov.group.flowgoods.inventory.web;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/suppliers")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class SupplierController {
     private final SupplierService supplierService;
 

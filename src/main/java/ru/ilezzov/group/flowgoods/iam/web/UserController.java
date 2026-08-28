@@ -1,5 +1,6 @@
 package ru.ilezzov.group.flowgoods.iam.web;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{uuid}")
     public ResponseEntity<UserResponseDto> getUserByUuid(@PathVariable final UUID uuid) {
         return ResponseEntity.ok(
@@ -40,6 +42,7 @@ public class UserController {
         return ResponseEntity.created(location).body(authResponseDto);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PatchMapping("/me")
     public ResponseEntity<UserResponseDto> updateUser(@AuthenticationPrincipal JwtPrincipal jwtPrincipal, @RequestBody@Valid final UserUpdateDto dto) {
         return ResponseEntity.ok(

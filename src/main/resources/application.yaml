@@ -24,3 +24,8 @@ app:
     expiration: 3600000
     type: "Bearer"
 
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

@@ -1,5 +1,6 @@
 package ru.ilezzov.group.flowgoods.tenant.web;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/workspaces")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class WorkspaceController {
     private final WorkspaceService workspaceService;
     private final UserResolver userResolver;
