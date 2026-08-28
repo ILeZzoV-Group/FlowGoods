@@ -37,6 +37,9 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 
+	implementation("org.hibernate:hibernate-jpamodelgen:6.2.26.Final")
+	annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.2.26.Final")
+
 	testImplementation("org.springframework.security:spring-security-test")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")

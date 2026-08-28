@@ -6,3 +6,14 @@ app:
         title: "Parameter Cannot Be Null"
         type: "https://api.ilezzov.ru/errors/parameter-cannot-be-null"
         message: "Parameter ''{0}'' cannot be null"
+      cursor-encoding-failed:
+        status: 500
+        title: "Cursor Encoding Failed"
+        type: "https://api.ilezzov.ru/errors/cursor-encoding-failed"
+        message: "Failed to encode pagination cursor"
+
+      invalid-cursor:
+        status: 400
+        title: "Invalid Cursor"
+        type: "https://api.ilezzov.ru/errors/invalid-cursor"
+        message: "The provided pagination cursor ''{0}'' is invalid or has been tampered with"
