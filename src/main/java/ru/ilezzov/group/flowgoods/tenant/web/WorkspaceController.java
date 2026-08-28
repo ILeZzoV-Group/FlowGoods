@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
 import ru.ilezzov.group.flowgoods.iam.resolver.UserResolver;
 import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtPrincipal;
 import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceCreateDto;
+import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceFilterDto;
 import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceResponseDto;
 import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceUpdateDto;
 import ru.ilezzov.group.flowgoods.tenant.service.WorkspaceService;
@@ -31,6 +33,20 @@ public class WorkspaceController {
 
         return ResponseEntity.ok(
                 this.workspaceService.getWorkspaceByUuidAndOwnerId(uuid, ownerId)
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<CursorResponseDto<WorkspaceResponseDto>> getWorkspaces(
+            @AuthenticationPrincipal JwtPrincipal principal,
+            @Valid final WorkspaceFilterDto filter,
+            @RequestParam(required = false) final String cursor,
+            @RequestParam(defaultValue = "20") final int limit) {
+
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+
+        return ResponseEntity.ok(
+                this.workspaceService.getWorkspaces(ownerId, filter, cursor, limit)
         );
     }
 

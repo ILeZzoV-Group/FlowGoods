@@ -20,9 +20,11 @@ spring:
 
 app:
   jwt:
-    secret: 5eMC3WOWY2PVdKifPllqJqofpXr4RWHHTyDar4teXej
+    secret: ${JWT-SECRET:5eMC3WOWY2PVdKifPllqJqofpXr4RWHHTyDar4teXej}
     expiration: 3600000
     type: "Bearer"
+  cursor:
+    secret: ${CURSOR_SECRET_KEY:kaQ8u/I1nW+TCdHK51ayqABiIldKK3WWO5i1l2didKE=}
 
 springdoc:
   api-docs:

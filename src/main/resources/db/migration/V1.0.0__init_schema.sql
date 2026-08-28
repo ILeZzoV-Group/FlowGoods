@@ -41,6 +41,9 @@ CREATE TABLE IF NOT EXISTS workspaces (
 CREATE UNIQUE INDEX uk_workspaces_owner_id_name_lower
     ON workspaces (owner_id, LOWER(name));
 
+CREATE INDEX idx_workspaces_owner_id_id
+    ON workspaces (owner_id, id);
+
 CREATE TABLE IF NOT EXISTS suppliers (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,

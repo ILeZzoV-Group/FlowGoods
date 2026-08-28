@@ -1,14 +1,21 @@
 package ru.ilezzov.group.flowgoods.tenant.repository;
 
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.ilezzov.group.flowgoods.tenant.entity.Workspace;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
+public interface WorkspaceRepository extends JpaRepository<Workspace, Long>, JpaSpecificationExecutor<Workspace> {
     Optional<Workspace> findByUuid(final UUID uuid);
 
     Optional<Workspace> findByUuidAndOwnerId(final UUID uuid, final Long ownerId);
