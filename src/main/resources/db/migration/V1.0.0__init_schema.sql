@@ -87,6 +87,9 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE UNIQUE INDEX uk_categories_workspace_id_name_lower
     ON categories (workspace_id, LOWER(name));
 
+CREATE INDEX idx_categories_owner_id_id
+    ON categories (workspace_id, id);
+
 CREATE TABLE IF NOT EXISTS marketplaces (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,

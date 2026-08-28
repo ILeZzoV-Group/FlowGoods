@@ -7,13 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
 import ru.ilezzov.group.flowgoods.iam.resolver.UserResolver;
 import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtPrincipal;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryCreateDto;
+import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.service.CategoryService;
-import ru.ilezzov.group.flowgoods.tenant.mapper.WorkspaceMapper;
 import ru.ilezzov.group.flowgoods.tenant.resolver.WorkspaceResolver;
 
 import java.net.URI;
@@ -36,6 +37,22 @@ public class CategoryController {
 
         return ResponseEntity.ok(
                 this.categoryService.getCategory(uuid, workspaceId)
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<CursorResponseDto<CategoryResponseDto>> getCategorys(
+            @AuthenticationPrincipal JwtPrincipal principal,
+            @RequestHeader("X-Workspace-ID") final UUID workspaceUuid,
+            @Valid final CategoryFilterDto filter,
+            @RequestParam(required = false) final String cursor,
+            @RequestParam(defaultValue = "20") final int limit) {
+
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
+        return ResponseEntity.ok(
+                this.categoryService.getCategories(workspaceId, filter, cursor, limit)
         );
     }
 
