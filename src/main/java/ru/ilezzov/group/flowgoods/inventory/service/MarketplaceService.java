@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
 import ru.ilezzov.group.flowgoods.common.cursor.encoder.AesCursorEncoder;
+import ru.ilezzov.group.flowgoods.inventory.dto.filter.CommonCursorFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceCreateDto;
-import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Marketplace;
@@ -65,8 +65,9 @@ public class MarketplaceService {
     }
 
     @Transactional(readOnly = true)
-    public CursorResponseDto<MarketplaceResponseDto> getMarketplaces(final Long workspaceId, final MarketplaceFilterDto dto, final String cursor, final int limit) {
-        final Long lastId = this.cursorEncoder.decode(cursor);
+    public CursorResponseDto<MarketplaceResponseDto> getMarketplaces(final Long workspaceId, final CommonCursorFilterDto dto) {
+        final Long lastId = this.cursorEncoder.decode(dto.cursor());
+        final int limit = dto.limit();
 
         final Specification<Marketplace> specification = Specification
                 .where(MarketplaceSpecification.workspaceIdEquals(workspaceId))

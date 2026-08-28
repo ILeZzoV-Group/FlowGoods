@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
 import ru.ilezzov.group.flowgoods.common.cursor.encoder.AesCursorEncoder;
+import ru.ilezzov.group.flowgoods.inventory.dto.filter.CommonCursorFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierCreateDto;
-import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.supplier.SupplierUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Supplier;
@@ -16,7 +16,6 @@ import ru.ilezzov.group.flowgoods.inventory.mapper.SupplierMapper;
 import ru.ilezzov.group.flowgoods.inventory.repository.SupplierRepository;
 import ru.ilezzov.group.flowgoods.inventory.resolver.SupplierResolver;
 import ru.ilezzov.group.flowgoods.inventory.specification.SupplierSpecification;
-import ru.ilezzov.group.flowgoods.tenant.dto.WorkspaceFilterDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -54,8 +53,9 @@ public class SupplierService {
     }
 
     @Transactional(readOnly = true)
-    public CursorResponseDto<SupplierResponseDto> getSuppliers(final Long workspaceId, final SupplierFilterDto dto, final String cursor, final int limit) {
-        final Long lastId = this.cursorEncoder.decode(cursor);
+    public CursorResponseDto<SupplierResponseDto> getSuppliers(final Long workspaceId, final CommonCursorFilterDto dto) {
+        final Long lastId = this.cursorEncoder.decode(dto.cursor());
+        final int limit = dto.limit();
 
         final Specification<Supplier> specification = Specification
                 .where(SupplierSpecification.workspaceIdEquals(workspaceId))

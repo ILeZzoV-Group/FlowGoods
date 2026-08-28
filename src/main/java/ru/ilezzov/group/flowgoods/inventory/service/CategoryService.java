@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
 import ru.ilezzov.group.flowgoods.common.cursor.encoder.AesCursorEncoder;
+import ru.ilezzov.group.flowgoods.inventory.dto.filter.CommonCursorFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryCreateDto;
-import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.category.CategoryUpdateDto;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Category;
@@ -65,8 +65,9 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public CursorResponseDto<CategoryResponseDto> getCategories(final Long workspaceId, final CategoryFilterDto dto, final String cursor, final int limit) {
-        final Long lastId = this.cursorEncoder.decode(cursor);
+    public CursorResponseDto<CategoryResponseDto> getCategories(final Long workspaceId, final CommonCursorFilterDto dto) {
+        final Long lastId = this.cursorEncoder.decode(dto.cursor());
+        final int limit = dto.limit();
 
         final Specification<Category> specification = Specification
                 .where(CategorySpecification.workspaceIdEquals(workspaceId))
