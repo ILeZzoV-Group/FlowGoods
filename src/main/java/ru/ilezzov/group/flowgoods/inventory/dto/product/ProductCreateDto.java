@@ -13,7 +13,7 @@ public record ProductCreateDto (
         String name,
 
         @Size(min = 3, max = 63, message = "{validation.product.sku.size}")
-        @Pattern(regexp = "^[a-zA-Z0-9\\\\-_]+$", message = "{validation.product.sku.invalid}")
+        @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "{validation.product.sku.invalid}")
         String sku,
 
         @PositiveOrZero(message = "{validation.product.price.positive_or_zero}")
@@ -25,5 +25,11 @@ public record ProductCreateDto (
 
         UUID supplierId,
 
-        boolean publishImmediately
-) {}
+        Boolean publishImmediately
+) {
+        public ProductCreateDto {
+               if (publishImmediately == null) {
+                       publishImmediately = false;
+               }
+        }
+}
