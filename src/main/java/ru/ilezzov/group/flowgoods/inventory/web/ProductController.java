@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
 import ru.ilezzov.group.flowgoods.iam.resolver.UserResolver;
 import ru.ilezzov.group.flowgoods.iam.security.jwt.JwtPrincipal;
+import ru.ilezzov.group.flowgoods.inventory.dto.filter.ProductFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.ProductCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.ProductResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.ProductUpdateDto;
@@ -35,6 +37,20 @@ public class ProductController {
 
         return ResponseEntity.ok(
                 this.productService.getProduct(uuid, workspaceId)
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<CursorResponseDto<ProductResponseDto>> getProducts(
+            @AuthenticationPrincipal JwtPrincipal principal,
+            @RequestHeader("X-Workspace-ID") final UUID workspaceUuid,
+            @Valid ProductFilterDto filter
+    ) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        final Long workspaceId = this.workspaceResolver.resolveIdByUuidAndOwnerId(workspaceUuid, ownerId);
+
+        return ResponseEntity.ok(
+                this.productService.getProducts(workspaceId, filter)
         );
     }
 

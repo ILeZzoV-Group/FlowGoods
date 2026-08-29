@@ -129,6 +129,9 @@ CREATE TABLE IF NOT EXISTS products (
         REFERENCES workspaces(id) ON DELETE CASCADE
 );
 
+CREATE INDEX idx_products_workspace_id_id
+    ON products (workspace_id, id);
+
 CREATE UNIQUE INDEX uk_products_workspace_id_sku_lower
     ON products (workspace_id, LOWER(sku)) WHERE sku IS NOT NULL;
 
@@ -137,3 +140,9 @@ CREATE INDEX uk_products_workspace_id_status
 
 CREATE INDEX uk_products_workspace_id_category
     ON products (workspace_id, category_id);
+
+CREATE INDEX idx_products_workspace_id_marketplace
+    ON products (workspace_id, marketplace_id);
+
+CREATE INDEX idx_products_workspace_id_supplier
+    ON products (workspace_id, supplier_id);

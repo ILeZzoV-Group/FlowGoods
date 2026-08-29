@@ -14,4 +14,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
 
     @Query("SELECT COUNT(c) > 0 FROM Category c WHERE c.workspaceId = :workspaceId AND LOWER(c.name) = LOWER(:name)")
     boolean existsByNameIgnoreCaseAndWorkspaceId(@Param("name") final String name, @Param("workspaceId") final Long workspaceId);
+
+    @Query("SELECT c.id FROM Category c WHERE c.uuid = :uuid and c.workspaceId =:workspaceId")
+    Optional<Long> findIdByUuidAndOwnerId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
 }
