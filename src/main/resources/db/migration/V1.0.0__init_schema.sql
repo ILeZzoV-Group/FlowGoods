@@ -146,3 +146,21 @@ CREATE INDEX idx_products_workspace_id_marketplace
 
 CREATE INDEX idx_products_workspace_id_supplier
     ON products (workspace_id, supplier_id);
+
+
+CREATE TABLE IF NOT EXISTS stocks (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    product_id bigint UNIQUE NOT NULL,
+    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
+    quantity bigint DEFAULT 0 check ( quantity >= 0 ) NOT NULL,
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_stocks_product FOREIGN KEY (product_id)
+        REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_stocks_workspace_id_id
+    ON stocks (workspace_id, id);

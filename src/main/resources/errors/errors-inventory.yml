@@ -66,8 +66,21 @@ app:
         title: "Cannot Update Archived Product"
         type: "https://api.ilezzov.ru/errors/cannot-update-archived-product"
         message: "Cannot update product with UUID ''{0}'' because it is archived"
+
       cannot-suspend-archived-product:
         status: 400
         title: "Cannot Suspend Archived Product"
         type: "https://api.ilezzov.ru/errors/cannot-suspend-archived-product"
         message: "Cannot suspend product with UUID {0} because it is archived"
+
+      stock-not-found:
+        status: 404
+        title: "Stock Not Found"
+        type: "https://api.ilezzov.ru/errors/stock-not-found"
+        message: "Operation failed because stock for product with UUID {0} was not found"
+
+      not-enough-stock:
+        status: 400
+        title: "Not Enough Stock"
+        type: "https://api.ilezzov.ru/errors/not-enough-stock"
+        message: "Not enough stock for product with UUID {0}"
