@@ -16,5 +16,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long>, JpaSp
     boolean existsByNameIgnoreCaseAndWorkspaceId(@Param("name") final String name, @Param("workspaceId") final Long workspaceId);
 
     @Query("SELECT c.id FROM Category c WHERE c.uuid = :uuid and c.workspaceId =:workspaceId")
-    Optional<Long> findIdByUuidAndOwnerId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
+    Optional<Long> findIdByUuidAndWorkspaceId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
 }

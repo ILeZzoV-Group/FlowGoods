@@ -38,7 +38,7 @@ public class CategoryResolver {
             throw new NotNullableException("workspaceId");
         }
 
-        return this.repository.findIdByUuidAndOwnerId(uuid, workspaceId)
+        return this.repository.findIdByUuidAndWorkspaceId(uuid, workspaceId)
                 .orElseThrow(() -> new CategoryNotFoundException(uuid));
     }
 }
