@@ -164,3 +164,61 @@ CREATE TABLE IF NOT EXISTS stocks (
 
 CREATE INDEX idx_stocks_workspace_id_id
     ON stocks (workspace_id, id);
+
+CREATE TABLE IF NOT EXISTS transaction_categories (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    workspace_id bigint NOT NULL,
+    type varchar(63) NOT NULL CHECK ( type in ('INCOME', 'EXPENSE') ),
+    name varchar(255) NOT NULL,
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_transactions_categories_workspace FOREIGN KEY (workspace_id)
+        REFERENCES workspaces(id) ON DELETE CASCADE
+);
+
+CREATE UNIQUE INDEX uk_transaction_categories_workspace_id_name_lower
+    ON transaction_categories (workspace_id, LOWER(name));
+
+CREATE INDEX idx_transaction_categories_workspace_id_type
+    ON transaction_categories (workspace_id, type);
+
+CREATE INDEX idx_transaction_categories_workspace_id_id
+    ON transaction_categories (workspace_id, id);
+
+CREATE TABLE IF NOT EXISTS transactions (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    workspace_id bigint NOT NULL,
+    idempotency_key varchar(63) NOT NULL,
+    category_id bigint NOT NULL,
+    type varchar(63) NOT NULL CHECK ( type in ('INCOME', 'EXPENSE') ),
+    amount decimal(12, 2) NOT NULL CHECK ( amount >= 0 ),
+    description varchar(1024),
+    created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_transactions_workspace FOREIGN KEY (workspace_id)
+        REFERENCES workspaces(id) ON DELETE CASCADE,
+
+    CONSTRAINT fk_transactions_category FOREIGN KEY (category_id)
+        REFERENCES transaction_categories(id) ON DELETE RESTRICT
+);
+
+CREATE UNIQUE INDEX uk_transactions_workspace_id_idempotency_key
+    ON transactions (workspace_id, idempotency_key);
+
+CREATE INDEX idx_transactions_workspace_id_id
+    ON transactions (workspace_id, id);
+
+CREATE INDEX idx_transactions_workspace_id_type
+    ON transactions (workspace_id, type);
+
+CREATE INDEX idx_transactions_workspace_id_created_at
+    ON transactions (workspace_id, created_at DESC, id DESC);
+
+CREATE INDEX idx_transactions_workspace_id_transaction_category
+    ON transactions (workspace_id, category_id);

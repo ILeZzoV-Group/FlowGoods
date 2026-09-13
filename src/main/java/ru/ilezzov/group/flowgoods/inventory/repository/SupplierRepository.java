@@ -13,5 +13,5 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long>, JpaSp
     Optional<Supplier> findByUuidAndWorkspaceId(UUID uuid, Long workspaceId);
 
     @Query("SELECT s.id FROM Supplier s WHERE s.uuid = :uuid and s.workspaceId =:workspaceId")
-    Optional<Long> findIdByUuidAndOwnerId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
+    Optional<Long> findIdByUuidAndWorkspaceId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
 }

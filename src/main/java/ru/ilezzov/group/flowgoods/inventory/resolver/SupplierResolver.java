@@ -5,7 +5,6 @@ import org.mapstruct.Context;
 import org.springframework.stereotype.Component;
 import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
 import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Supplier;
-import ru.ilezzov.group.flowgoods.inventory.exception.category.CategoryNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.exception.supplier.SupplierNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.repository.SupplierRepository;
 
@@ -38,7 +37,7 @@ public class SupplierResolver {
             throw new NotNullableException("workspaceId");
         }
 
-        return this.repository.findIdByUuidAndOwnerId(uuid, workspaceId)
+        return this.repository.findIdByUuidAndWorkspaceId(uuid, workspaceId)
                 .orElseThrow(() -> new SupplierNotFoundException(uuid));
     }
 }
