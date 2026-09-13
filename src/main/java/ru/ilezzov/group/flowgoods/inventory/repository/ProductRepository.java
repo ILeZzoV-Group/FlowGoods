@@ -16,4 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query("SELECT COUNT(p) > 0 FROM Product p WHERE p.workspaceId = :workspaceId AND LOWER(p.sku) = LOWER(:sku)")
     boolean existsBySkuIgnoreCaseAndWorkspaceId(@Param("sku") final String sku, @Param("workspaceId") final Long workspaceId);
 
+    @Query("SELECT p.id FROM Product p WHERE p.uuid = :uuid and p.workspaceId =:workspaceId")
+    Optional<Long> findIdByUuidAndWorkspaceId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
 }

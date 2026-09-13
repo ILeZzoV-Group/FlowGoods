@@ -27,4 +27,17 @@ public class ProductResolver {
         return this.repository.findByUuidAndWorkspaceId(uuid, workspaceId)
                 .orElseThrow(() -> new ProductNotFoundException(uuid));
     }
+
+    public Long resolverIdByUuidAndWorkspaceId(final UUID uuid, final Long workspaceId) {
+        if (uuid == null) {
+            throw new NotNullableException("uuid");
+        }
+
+        if (workspaceId == null) {
+            throw new NotNullableException("workspaceId");
+        }
+
+        return this.repository.findIdByUuidAndWorkspaceId(uuid, workspaceId)
+                .orElseThrow(() -> new ProductNotFoundException(uuid));
+    }
 }

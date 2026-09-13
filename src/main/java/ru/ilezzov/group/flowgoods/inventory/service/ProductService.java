@@ -1,29 +1,24 @@
 package ru.ilezzov.group.flowgoods.inventory.service;
 
 import io.micrometer.common.util.StringUtils;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.xml.sax.SAXParseException;
 import ru.ilezzov.group.flowgoods.common.cursor.dto.CursorResponseDto;
 import ru.ilezzov.group.flowgoods.common.cursor.encoder.AesCursorEncoder;
-import ru.ilezzov.group.flowgoods.common.cursor.encoder.CursorEncoder;
 import ru.ilezzov.group.flowgoods.inventory.dto.filter.ProductFilterDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.ProductCreateDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.ProductResponseDto;
 import ru.ilezzov.group.flowgoods.inventory.dto.product.ProductUpdateDto;
-import ru.ilezzov.group.flowgoods.inventory.dto.product.marketplace.MarketplaceResponseDto;
-import ru.ilezzov.group.flowgoods.inventory.entity.product.Category;
-import ru.ilezzov.group.flowgoods.inventory.entity.product.Marketplace;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Product;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.ProductStatus;
+import ru.ilezzov.group.flowgoods.inventory.event.ProductCreatedEvent;
 import ru.ilezzov.group.flowgoods.inventory.exception.product.CannotUpdateArchivedProductException;
 import ru.ilezzov.group.flowgoods.inventory.exception.product.ProductAlreadyExistsException;
 import ru.ilezzov.group.flowgoods.inventory.mapper.ProductMapper;
-import ru.ilezzov.group.flowgoods.inventory.repository.MarketplaceRepository;
 import ru.ilezzov.group.flowgoods.inventory.repository.ProductRepository;
 import ru.ilezzov.group.flowgoods.inventory.resolver.CategoryResolver;
 import ru.ilezzov.group.flowgoods.inventory.resolver.MarketplaceResolver;
@@ -48,6 +43,8 @@ public class ProductService {
     private final MarketplaceResolver marketplaceResolver;
     private final SupplierResolver supplierResolver;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Transactional(readOnly = true)
     public ProductResponseDto getProduct(final UUID uuid, final Long workspaceId) {
         return this.productMapper.toDto(
@@ -69,8 +66,13 @@ public class ProductService {
             product.publish();
         }
 
+        final Product savedProduct = this.productRepository.save(product);
+        this.eventPublisher.publishEvent(
+                new ProductCreatedEvent(product)
+        );
+
         return this.productMapper.toDto(
-                productRepository.save(product)
+                savedProduct
         );
     }
 
