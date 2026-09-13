@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
         REFERENCES workspaces(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_suppliers_owner_id_id
+CREATE INDEX idx_suppliers_workspace_id_id
     ON suppliers (workspace_id, id);
 
 CREATE TABLE IF NOT EXISTS contacts (
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS categories (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
     name varchar(63) NOT NULL,
-    description text,
+    description varchar(1024),
     workspace_id bigint NOT NULL,
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE UNIQUE INDEX uk_categories_workspace_id_name_lower
     ON categories (workspace_id, LOWER(name));
 
-CREATE INDEX idx_categories_owner_id_id
+CREATE INDEX idx_categories_workspace_id_id
     ON categories (workspace_id, id);
 
 CREATE TABLE IF NOT EXISTS marketplaces (
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS marketplaces (
 CREATE UNIQUE INDEX uk_marketplaces_workspace_id_name_lower
     ON marketplaces (workspace_id, LOWER(name));
 
-CREATE INDEX idx_marketplaces_owner_id_id
+CREATE INDEX idx_marketplaces_workspace_id_id
     ON marketplaces (workspace_id, id);
 
 CREATE TABLE IF NOT EXISTS products (
@@ -117,16 +117,25 @@ CREATE TABLE IF NOT EXISTS products (
     sku varchar(63),
     status varchar(63) NOT NULL DEFAULT 'DRAFT' CHECK ( status in ('DRAFT', 'ACTIVE', 'INACTIVE', 'ARCHIVED') ),
     price decimal(12, 2) CHECK ( price >= 0 ),
-    category_id bigint REFERENCES categories(id),
-    marketplace_id bigint REFERENCES marketplaces(id),
-    supplier_id bigint REFERENCES suppliers(id),
-    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
+    category_id bigint,
+    marketplace_id bigint,
+    supplier_id bigint,
+    workspace_id bigint NOT NULL,
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     version INT NOT NULL DEFAULT 0,
 
     CONSTRAINT fk_products_workspace FOREIGN KEY (workspace_id)
-        REFERENCES workspaces(id) ON DELETE CASCADE
+        REFERENCES workspaces(id) ON DELETE CASCADE,
+
+    CONSTRAINT fk_products_category_id FOREIGN KEY (category_id)
+        REFERENCES categories(id) ON DELETE SET NULL,
+
+    CONSTRAINT fk_products_marketplace_id FOREIGN KEY (marketplace_id)
+        REFERENCES marketplaces(id) ON DELETE SET NULL,
+
+    CONSTRAINT fk_products_supplier_id FOREIGN KEY (supplier_id)
+        REFERENCES suppliers(id) ON DELETE SET NULL
 );
 
 CREATE INDEX idx_products_workspace_id_id
@@ -135,10 +144,10 @@ CREATE INDEX idx_products_workspace_id_id
 CREATE UNIQUE INDEX uk_products_workspace_id_sku_lower
     ON products (workspace_id, LOWER(sku)) WHERE sku IS NOT NULL;
 
-CREATE INDEX uk_products_workspace_id_status
+CREATE INDEX idx_products_workspace_id_status
     ON products (workspace_id, status);
 
-CREATE INDEX uk_products_workspace_id_category
+CREATE INDEX idx_products_workspace_id_category
     ON products (workspace_id, category_id);
 
 CREATE INDEX idx_products_workspace_id_marketplace
