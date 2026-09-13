@@ -5,7 +5,6 @@ import org.mapstruct.Context;
 import org.springframework.stereotype.Component;
 import ru.ilezzov.group.flowgoods.common.exception.general.NotNullableException;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.Marketplace;
-import ru.ilezzov.group.flowgoods.inventory.exception.category.CategoryNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.exception.marketplace.MarketplaceNotFoundException;
 import ru.ilezzov.group.flowgoods.inventory.repository.MarketplaceRepository;
 
@@ -38,7 +37,7 @@ public class MarketplaceResolver {
             throw new NotNullableException("workspaceId");
         }
 
-        return this.repository.findIdByUuidAndOwnerId(uuid, workspaceId)
+        return this.repository.findIdByUuidAndWorkspaceId(uuid, workspaceId)
                 .orElseThrow(() -> new MarketplaceNotFoundException(uuid));
     }
 }

@@ -16,5 +16,5 @@ public interface MarketplaceRepository extends JpaRepository<Marketplace, Long>,
     boolean existsByNameIgnoreCaseAndWorkspaceId(@Param("name") final String name, @Param("workspaceId") final Long workspaceId);
 
     @Query("SELECT m.id FROM Marketplace m WHERE m.uuid = :uuid and m.workspaceId =:workspaceId")
-    Optional<Long> findIdByUuidAndOwnerId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
+    Optional<Long> findIdByUuidAndWorkspaceId(@Param("uuid") final UUID uuid, @Param("workspaceId") final Long workspaceId);
 }
