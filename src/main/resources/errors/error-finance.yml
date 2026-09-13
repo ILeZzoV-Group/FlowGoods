@@ -1,0 +1,26 @@
+app:
+  exceptions:
+    errors:
+      transaction-category-not-found:
+        status: 404
+        title: "Transaction Category Not Found"
+        type: "https://api.ilezzov.ru/errors/transaction-category-not-found"
+        message: "Transaction category with UUID {0} was not found"
+
+      transaction-category-already-exists:
+        status: 409
+        title: "Transaction Category Already Exists"
+        type: "https://api.ilezzov.ru/errors/transaction-category-already-exists"
+        message: "Transaction category with name ''{0}'' already exists"
+
+      transaction-not-found:
+        status: 404
+        title: "Transaction Not Found"
+        type: "https://api.ilezzov.ru/errors/transaction-not-found"
+        message: "Transaction with UUID {0} was not found"
+
+      transaction-already-exists:
+        status: 409
+        title: "Transaction Already Exists"
+        type: "https://api.ilezzov.ru/errors/transaction-already-exists"
+        message: "Transaction with idempotency key ''{0}'' already exists"

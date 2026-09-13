@@ -15,6 +15,7 @@ spring:
     - "classpath:errors/errors-general.yml"
     - "classpath:errors/errors-password.yml"
     - "classpath:errors/errors-workspace.yml"
+    - "classpath:errors/error-finance.yml"
   jpa:
     show-sql: true
 
