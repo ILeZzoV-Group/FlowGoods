@@ -161,11 +161,14 @@ CREATE TABLE IF NOT EXISTS stocks (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid uuid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
     product_id bigint UNIQUE NOT NULL,
-    workspace_id bigint REFERENCES workspaces(id) NOT NULL,
+    workspace_id bigint NOT NULL,
     quantity bigint DEFAULT 0 check ( quantity >= 0 ) NOT NULL,
     created_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamptz DEFAULT CURRENT_TIMESTAMP NOT NULL,
     version INT NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_stocks_workspace FOREIGN KEY (workspace_id)
+        REFERENCES workspaces(id) ON DELETE CASCADE,
 
     CONSTRAINT fk_stocks_product FOREIGN KEY (product_id)
         REFERENCES products(id) ON DELETE CASCADE
@@ -214,7 +217,7 @@ CREATE TABLE IF NOT EXISTS transactions (
         REFERENCES workspaces(id) ON DELETE CASCADE,
 
     CONSTRAINT fk_transactions_category FOREIGN KEY (category_id)
-        REFERENCES transaction_categories(id) ON DELETE RESTRICT
+        REFERENCES transaction_categories(id) ON DELETE SET NULL
 );
 
 CREATE UNIQUE INDEX uk_transactions_workspace_id_idempotency_key

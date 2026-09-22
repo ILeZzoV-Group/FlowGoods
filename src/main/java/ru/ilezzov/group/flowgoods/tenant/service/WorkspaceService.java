@@ -109,4 +109,8 @@ public class WorkspaceService {
 
         return new CursorResponseDto<>(workspaceResponseDtoList, nextCursor);
     }
+
+    public void deleteWorkspace(final UUID uuid, final Long ownerId) {
+        this.workspaceRepository.deleteByUuidAndOwnerId(uuid, ownerId);
+    }
 }

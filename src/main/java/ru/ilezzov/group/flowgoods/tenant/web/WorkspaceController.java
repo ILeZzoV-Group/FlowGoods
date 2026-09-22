@@ -70,4 +70,14 @@ public class WorkspaceController {
         final WorkspaceResponseDto responseDto = this.workspaceService.updateWorkspace(updateDto, uuid, ownerId);
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteWorkspace(
+            @AuthenticationPrincipal final JwtPrincipal principal,
+            @PathVariable final UUID uuid
+    ) {
+        final Long ownerId = this.userResolver.resolveUserIdByUuid(principal.uuid());
+        this.workspaceService.deleteWorkspace(uuid, ownerId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -28,4 +28,6 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, Long>, Jpa
 
     @Query("SELECT COUNT(w) > 0 FROM Workspace w WHERE w.ownerId = :ownerId AND LOWER(w.name) = LOWER(:name)")
     boolean existsByNameIgnoreCaseAndOwnerId(@Param("name") String name, @Param("ownerId") Long ownerId);
+
+    void deleteByUuidAndOwnerId(final UUID uuid, final Long ownerId);
 }
