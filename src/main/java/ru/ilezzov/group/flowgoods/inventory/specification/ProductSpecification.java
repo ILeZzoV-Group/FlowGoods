@@ -3,6 +3,7 @@ package ru.ilezzov.group.flowgoods.inventory.specification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 import ru.ilezzov.group.flowgoods.inventory.entity.product.*;
+import ru.ilezzov.group.flowgoods.inventory.entity.supplier.Supplier_;
 
 public class ProductSpecification {
     public static Specification<Product> productLikeName(final String name) {
@@ -38,8 +39,7 @@ public class ProductSpecification {
             if (categoryId == null) {
                 return null;
             }
-
-            return cb.equal(root.get(Category_.ID), categoryId);
+            return cb.equal(root.get(Product_.category).get(Category_.id), categoryId);
         };
     }
 
@@ -49,7 +49,7 @@ public class ProductSpecification {
                 return null;
             }
 
-            return cb.equal(root.get(Marketplace_.ID), marketplaceId);
+            return cb.equal(root.get(Product_.marketplace).get(Marketplace_.ID), marketplaceId);
         };
     }
 
@@ -59,7 +59,7 @@ public class ProductSpecification {
                 return null;
             }
 
-            return cb.equal(root.get(Category_.ID), supplierId);
+            return cb.equal(root.get(Product_.supplier).get(Supplier_.ID), supplierId);
         };
     }
 
